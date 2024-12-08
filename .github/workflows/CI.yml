@@ -25,8 +25,7 @@ jobs:
       run: julia --project=@. -e 'using Pkg; Pkg.instantiate()'
 
     - name: Run tests with coverage
-      run: |
-        julia --project=@. --code-coverage test/runtests.jl
+      run: julia --project=@. --code-coverage test/runtests.jl
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v5
