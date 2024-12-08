@@ -1,3 +1,4 @@
+using Coverage
 using SpectralDeferredCorrections
 using Test
 
