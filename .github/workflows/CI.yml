@@ -30,7 +30,7 @@ jobs:
     - name: Run tests with coverage
       run: |
         julia --project=@. --code-coverage test/runtests.jl
-        julia --project=@. -e 'using Coverage; Coverage.process_folder("src", coverage_file="lcov.info")'
+        julia --project=@. -e 'using Coverage; create_lcov("src", output_file="lcov.info")'
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v5
