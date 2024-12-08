@@ -31,15 +31,7 @@ jobs:
       run: julia --project=@. --code-coverage test/runtests.jl
 
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
-      with:
-        file: lcov.info
-        flags: unittests
-        name: codecov-umbrella
-        fail_ci_if_error: true
-
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v5
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         file: lcov.info
