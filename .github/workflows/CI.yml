@@ -27,8 +27,12 @@ jobs:
     - name: Run tests with coverage
       run: julia --project=@. --code-coverage test/runtests.jl
 
+    - name: Print lcov.info for debugging
+      run: cat lcov.info
+
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v5
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        file: lcov.info
+        file: ./lcov.info
+        fail_ci_if_error: true
