@@ -14,7 +14,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Set up Julia
       uses: julia-actions/setup-julia@v1
@@ -23,13 +23,6 @@ jobs:
 
     - name: Install dependencies
       run: julia --project=@. -e 'using Pkg; Pkg.instantiate()'
-
-    - name: Install and update dependencies
-      run: |
-        julia --project=@. -e 'using Pkg; Pkg.instantiate(); Pkg.update("Coverage")'
-
-#    - name: Install Coverage dependency
-#      run: julia --project=@. -e 'using Pkg; Pkg.add("Coverage")'
 
     - name: Run tests with coverage
       run: |
@@ -40,4 +33,3 @@ jobs:
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         file: lcov.info
-
