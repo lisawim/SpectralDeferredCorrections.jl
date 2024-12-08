@@ -1,1 +1,3 @@
-/Manifest.toml
+src/*.cov
+test/*.cov
+lcov.info

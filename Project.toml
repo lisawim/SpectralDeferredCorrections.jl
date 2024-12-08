@@ -3,11 +3,16 @@ uuid = "18b2da82-ce85-419b-a263-4a22af66788b"
 authors = ["Lisa Wimmer"]
 version = "1.0.0-DEV"
 
+[deps]
+Coverage = "a2441757-f6aa-5fb2-8edb-039e3f45d037"
+
 [compat]
+Coverage = "1.6.1"
 julia = "1.6.7"
 
 [extras]
-Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+Coverage = "aa819f9c-3301-55e2-850d-134aab1a5b97"
+Test = "8dfed614-57bb-5a5c-81db-eced225cff08"
 
 [targets]
-test = ["Test"]
+test = ["Coverage", "Test"]
