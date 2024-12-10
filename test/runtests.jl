@@ -16,11 +16,23 @@ end
 
     u0 = u_exact(lin_problem, t0)
 
+    lamb_diff = 2.0
+    lamb_alg = -1.0
+    A = [lamb_diff lamb_alg; lamb_diff / eps -lamb_alg / eps]
+
+    problem = LinearTestSPP(A, eps, u0)
+
+    @test problem isa LinearTestSPP
+
     @test u0 == [1.0, -2.0]
 
     rhs = f(lin_problem, t0, u0)
 
     @test rhs == lin_problem.A * u0
+
+    @test rhs == f(problem, t0, u0)
+
+    @test u_exact(problem, t0) == u0
 
     # Test that it raises an error for t ≠ 0.0
     @test_throws NotImplementedError u_exact(lin_problem, 1.0)
