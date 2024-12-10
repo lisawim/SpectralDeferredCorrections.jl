@@ -1,0 +1,32 @@
+codecov:
+  # Enable the Codecov bot comment on pull requests
+  notify:
+    require_ci_to_pass: yes
+
+coverage:
+
+  # Exclude files or directories from coverage calculation
+  ignore:
+    - "test/*"  # Exclude test files
+    - "*.md"    # Exclude markdown files like README.md
+
+comment:
+  layout: "reach,diff,files,tree"
+  behavior: default  # Default behavior: post comment on all PRs
+  require_changes: false  # Post comments even if no changes in coverage
+  show_threshold: false  # Don't show the failure threshold in the comment
+
+flags:
+  julia:
+    paths:
+      - "src/"  # Focus on coverage within the `src` directory
+    carryforward: true  # Include previous builds' coverage if no changes are made
+
+parsers:
+  julia:
+    default_encoding: "utf-8"
+
+bot:
+  # Configure how the Codecov bot behaves
+  annotations: true
+  error_on_coverage_report_not_found: true  # Fail if no coverage report is found
