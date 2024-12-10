@@ -26,8 +26,6 @@ end
     @test_throws NotImplementedError u_exact(lin_problem, 1.0)
 end
 
-#include("linear_test.jl")
-
 using Coverage
 
 # Process raw coverage files in the "src" directory
