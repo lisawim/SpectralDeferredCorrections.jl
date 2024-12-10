@@ -1,5 +1,7 @@
 using Test
 using SpectralDeferredCorrections
+import .AbstractProblem
+import .LinearTestEquation
 
 @testset "Testing SpectralDeferredCorrections" begin
     @test add_numbers(2, 3) == 5

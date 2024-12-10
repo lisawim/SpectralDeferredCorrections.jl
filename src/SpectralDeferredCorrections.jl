@@ -5,13 +5,6 @@ A simple function that adds two numbers.
 """
 add_numbers(a::Number, b::Number) = a + b
 
-# Include core files
-#include("core/abstract_problem.jl")
-#include("core/errors.jl")
-
-# Include problem files
-#include("problems/linear_test.jl")
-
 # Include core modules
 include(joinpath(@__DIR__, "core/errors.jl"))
 include(joinpath(@__DIR__, "core/abstract_problem.jl"))
