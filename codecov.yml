@@ -4,25 +4,11 @@ codecov:
     require_ci_to_pass: yes
 
 coverage:
-  # Define the paths where coverage is collected
-  precision: 2  # Display coverage percentage with two decimal points
-  range: "70...100"  # Define the range for coverage: warn below 70%, target 100%
-  round: down
 
   # Exclude files or directories from coverage calculation
   ignore:
     - "test/*"  # Exclude test files
-    - "docs/*"  # Exclude documentation files
     - "*.md"    # Exclude markdown files like README.md
-    - "examples/*"  # Exclude example files
-    - "**/init.jl"  # Exclude initialization files
-
-# Custom thresholds for project-wide coverage
-coverage_rules:
-  default:
-    threshold: 5%  # Fail if coverage drops more than 5%
-    patch_threshold: 1%  # Fail if coverage for a patch drops more than 1%
-    flag_threshold: 1%
 
 comment:
   layout: "reach,diff,files,tree"
