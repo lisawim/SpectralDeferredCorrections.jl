@@ -2,3 +2,4 @@ src/*.cov
 src/problems/*.cov
 test/*.cov
 lcov.info
+codecov
