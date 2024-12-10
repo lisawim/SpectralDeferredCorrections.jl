@@ -16,17 +16,16 @@ All concrete problem types must subtype `AbstractDifferentialProblem` and implem
 """
 abstract type AbstractDifferentialProblem end
 
-# Interface functions to be implemented by all problems
 function f(problem::AbstractDifferentialProblem, t, u)
     throw(NotImplementedError("Right-hand side function must be implemented."))
 end
 
 function u_exact(problem::AbstractDifferentialProblem, t)
-    throw(NotImplementedError("Initial condition must be provided."))
+    throw(Errors.NotImplementedError("Initial condition must be provided."))
 end
 
 function initialize_problem(::Type{<:AbstractDifferentialProblem}, t)
-    throw(NotImplementedError("Initialization must be implemented."))
+    throw(Errors.NotImplementedError("Initialization must be implemented."))
 end
 
 end

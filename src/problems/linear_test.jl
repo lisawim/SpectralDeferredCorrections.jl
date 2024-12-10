@@ -1,6 +1,7 @@
 module LinearTestEquation
 
 using ..AbstractProblem
+using ..Errors
 
 export LinearTestSPP, initialize_problem, u_exact
 
@@ -41,7 +42,7 @@ function AbstractProblem.u_exact(problem::LinearTestSPP, t)
     if t == 0.0
         return problem.u0
     else
-        throw(NotImplementedError("Exact solution is only available at t = 0.0 for this problem."))
+        throw(Errors.NotImplementedError("Exact solution is only available at t = 0.0 for this problem."))
     end
 end
 

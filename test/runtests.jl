@@ -21,6 +21,9 @@ end
     rhs = f(lin_problem, t0, u0)
 
     @test rhs == lin_problem.A * u0
+
+    # Test that it raises an error for t ≠ 0.0
+    @test_throws NotImplementedError u_exact(lin_problem, 1.0)
 end
 
 #include("linear_test.jl")
