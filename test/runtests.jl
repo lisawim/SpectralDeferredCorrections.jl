@@ -6,6 +6,8 @@ using SpectralDeferredCorrections
     @test add_numbers(-1, 1) == 0
 end
 
+include("test_abstract_problem.jl")
+
 @testset "Linear Test SPP" begin
     t0 = 0.0
     eps = 1e-1
