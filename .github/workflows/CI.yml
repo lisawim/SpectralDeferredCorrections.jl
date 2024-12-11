@@ -1,23 +1,17 @@
 name: CI
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+on: [push, pull_request]
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
-
+    name: Test Julia
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
     - name: Set up Julia
-      uses: julia-actions/setup-julia@v1
+      uses: julia-actions/setup-julia@v2
       with:
         version: '1.9'
 
@@ -27,12 +21,15 @@ jobs:
     - name: Run tests with coverage
       run: julia --project=@. --code-coverage test/runtests.jl
 
-    - name: Print lcov.info for debugging
-      run: cat lcov.info
+    - name: Generate XML coverage report
+      run: julia --project=@. -e 'include("test/generate_coverage_xml.jl")'
+
+    - name: Print coverage.xml for debugging
+      run: cat coverage.xml
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v5
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        file: ./lcov.info
+        file: ./coverage.xml
         fail_ci_if_error: true
