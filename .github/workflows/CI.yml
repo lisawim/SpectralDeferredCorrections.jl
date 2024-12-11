@@ -1,11 +1,11 @@
-name: CI
+name: CI pipeline - SpectralDeferredCorrections.jl
 
 on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    name: Test Julia
+    runs-on: macos-latest
+    name: Julia 1.11.2 on macOS
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -13,23 +13,23 @@ jobs:
     - name: Set up Julia
       uses: julia-actions/setup-julia@v2
       with:
-        version: '1.9'
+        version: '1.11.2'
 
     - name: Install dependencies
-      run: julia --project=@. -e 'using Pkg; Pkg.instantiate()'
+      run: julia --project=@. -e 'using Pkg; Pkg.instantiate(); Pkg.precompile()'
 
     - name: Run tests with coverage
       run: julia --project=@. --code-coverage test/runtests.jl
 
-    - name: Generate XML coverage report
-      run: julia --project=@. -e 'include("test/generate_coverage_xml.jl")'
-
-    - name: Print coverage.xml for debugging
-      run: cat coverage.xml
+    - name: Process coverage
+      uses: julia-actions/julia-processcoverage@v1
+      with:
+        input: src  # Directory to process raw coverage data from
+        output: lcov.info  # Output file name
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v5
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        file: ./coverage.xml
+        file: ./lcov.info
         fail_ci_if_error: true
