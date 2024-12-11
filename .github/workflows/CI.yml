@@ -6,7 +6,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: Test Julia
-    teps:
+    steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
