@@ -5,7 +5,7 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Test Julia
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -19,17 +19,17 @@ jobs:
       run: julia --project=@. -e 'using Pkg; Pkg.instantiate()'
 
     - name: Run tests with coverage
-      run: julia --project=@. --code-coverage test/runtests.jl
+      run: julia --project=@. --code-coverage=test/runtests.jl
 
-    - name: Generate XML coverage report
-      run: julia --project=@. -e 'include("test/generate_coverage_xml.jl")'
-
-    - name: Print coverage.xml for debugging
-      run: cat coverage.xml
+    - name: Process coverage
+      uses: julia-actions/julia-processcoverage@v1
+      with:
+        input: src  # Directory to process raw coverage data from
+        output: lcov.info  # Output file name
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v5
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        file: ./coverage.xml
+        file: ./lcov.info
         fail_ci_if_error: true
