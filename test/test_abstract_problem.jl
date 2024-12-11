@@ -1,13 +1,19 @@
 using Test
 using SpectralDeferredCorrections
 
+println(methods(initialize_problem))
+
 @testset "AbstractProblem Tests" begin
     # Test that calling u_exact on an abstract type raises NotImplementedError
     struct DummyProblem <: AbstractDifferentialProblem end
 
+    # Test that calling `f` raises `NotImplementedError`
+    @test_throws NotImplementedError initialize_problem(DummyProblem, 0.0)
+
     dummy_problem = DummyProblem()
 
-    # Test that calling u_exact raises NotImplementedError
+    @test_throws NotImplementedError f(dummy_problem, 0.0, [1.0, 2.0])
+
     @test_throws NotImplementedError u_exact(dummy_problem, 0.0)
 end
 

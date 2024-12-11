@@ -3,7 +3,7 @@ module LinearTestEquation
 using ..AbstractProblem
 using ..Errors
 
-export LinearTestSPP, initialize_problem, u_exact
+export LinearTestSPP, u_exact
 
 """
     LinearTestSPP
@@ -46,7 +46,7 @@ function AbstractProblem.u_exact(problem::LinearTestSPP, t)
     end
 end
 
-function initialize_problem(::Type{LinearTestSPP}, eps, t0)
+function AbstractProblem.initialize_problem(::Type{LinearTestSPP}, eps, t0)
     lamb_diff = 2.0
     lamb_alg = -1.0
 
