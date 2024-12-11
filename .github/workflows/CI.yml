@@ -1,11 +1,11 @@
-name: CI
+name: CI pipeline - SpectralDeferredCorrections.jl
 
 on: [push, pull_request]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    name: Test Julia
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -19,7 +19,7 @@ jobs:
       run: julia --project=@. -e 'using Pkg; Pkg.instantiate()'
 
     - name: Run tests with coverage
-      run: julia --project=@. --code-coverage=test/runtests.jl
+      run: julia --project=@. --code-coverage test/runtests.jl
 
     - name: Process coverage
       uses: julia-actions/julia-processcoverage@v1
