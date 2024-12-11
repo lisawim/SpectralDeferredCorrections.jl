@@ -1,6 +1,8 @@
 module AbstractProblem
 
-export AbstractDifferentialProblem, f, u_exact
+using ..Errors
+
+export AbstractDifferentialProblem, f, u_exact, initialize_problem
 
 """
     AbstractDifferentialProblem
@@ -21,11 +23,11 @@ function f(problem::AbstractDifferentialProblem, t, u)
 end
 
 function u_exact(problem::AbstractDifferentialProblem, t)
-    throw(Errors.NotImplementedError("Initial condition must be provided."))
+    throw(NotImplementedError("Initial condition must be provided."))
 end
 
-function initialize_problem(::Type{<:AbstractDifferentialProblem}, t)
-    throw(Errors.NotImplementedError("Initialization must be implemented."))
+function initialize_problem(::Type{T}, t, args...; kwargs...) where {T<:AbstractDifferentialProblem}
+    throw(NotImplementedError("initialize_problem must be implemented for type $T."))
 end
 
 end
