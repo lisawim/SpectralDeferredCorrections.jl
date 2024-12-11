@@ -13,10 +13,12 @@ end
 
 @testset "AbstractProblem Interface Compatibility" begin
     struct DummyProblem2 <: AbstractDifferentialProblem
+        A::Matrix{Float64}
+        b::Vector{Float64}
         y0::Vector{Float64}
     end
 
-    # Extend u_exact for the mock problem
+    # Extend u_exact for the dummy problem
     function u_exact(problem::DummyProblem2, t)
         if t == 0.0
             return problem.y0
@@ -25,11 +27,30 @@ end
         end
     end
 
+    function f(problem::DummyProblem2, t, u)
+        return problem.A * u + problem.b
+    end
+
+    function initialize_problem(::Type{<:DummyProblem2}, A, b, y0, t; kwargs...)
+        return DummyProblem2(A, b, y0)
+    end
+
+    t0 = 0.0
+    y0 = [1.0, 2.0]
+
+    A = [1.0 0.0; 0.0 1.0]
+    b = [1.0, 1.0]
+
     # Create a mock problem instance
-    dummy_problem2 = DummyProblem2([1.0, 2.0])
+    dummy_problem2 = DummyProblem2(A, b, y0)
 
     # Test u_exact at t = 0.0
-    @test u_exact(dummy_problem2, 0.0) == [1.0, 2.0]
+    @test u_exact(dummy_problem2, t0) == y0
+
+    @test f(dummy_problem2, t0, y0) == A * y0 + b
+
+    @test initialize_problem(DummyProblem2, A, b, y0, t0) isa DummyProblem2
+    @test initialize_problem(DummyProblem2, A, b, y0, t0) isa AbstractDifferentialProblem
 
     # Test that u_exact raises an error for t ≠ 0.0
     @test_throws NotImplementedError u_exact(dummy_problem2, 1.0)

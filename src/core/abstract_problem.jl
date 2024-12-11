@@ -26,7 +26,7 @@ function u_exact(problem::AbstractDifferentialProblem, t)
     throw(NotImplementedError("Initial condition must be provided."))
 end
 
-function initialize_problem(::Type{<:AbstractDifferentialProblem}, t)
+function initialize_problem(::Type{<:AbstractDifferentialProblem}, t, args...; kwargs...)
     throw(NotImplementedError("Initialization must be implemented."))
 end
 
