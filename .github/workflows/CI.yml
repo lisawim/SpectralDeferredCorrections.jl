@@ -1,18 +1,12 @@
 name: CI
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+on: [push, pull_request]
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
-
-    steps:
+    name: Test Julia
+    teps:
     - name: Checkout code
       uses: actions/checkout@v4
 
@@ -32,7 +26,5 @@ jobs:
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v5
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        file: ./lcov.info
-        fail_ci_if_error: true
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
