@@ -10,27 +10,38 @@ export LinearTestSPP, u_exact
 
 Represents a linear singular perturbation problem of the form:
 
-    dy/dt = 2.0 * y - 1.0 * z
-    dz/dt = 1 / eps * (2.0 * y + 1.0 * z)
+    dy/dt = lamb_diff * y + lamb_alg * z
+    dz/dt = 1 / eps * (lamb_diff * y - lamb_alg * z)
 
 for perturbation parameter `eps`.
 
 ### Fields
 - `A::AbstractMatrix`: The coefficient matrix defining the linear operator.
 - `eps::AbstractFloat`: The perturbation parameter.
-- `u0::AbstractVector`: The initial condition at `t0`.
+- `lamb_diff::AbstractFloat`: Parameter from the problem.
+- `lamb_alg::AbstractFloat`: Parameter from the problem.
 
 ### Example
 ```julia
 A = [lamb_diff lamb_alg; lamb_diff / eps -lamb_alg / eps]
 eps = 1e-3
-u0 = [exp(2 * lamb_diff * t), lamb_diff / lamb_alg * np.exp(2 * lamb_diff * t)]
-problem = LinearTestSPP(A, eps, u0)
+u0 = [exp(2 * lamb_diff * t), lamb_diff / lamb_alg * exp(2 * lamb_diff * t)]
+problem = LinearTestSPP(eps)
 """
 struct LinearTestSPP <: AbstractProblem.AbstractDifferentialProblem
     A::AbstractMatrix
     eps::AbstractFloat
-    u0::AbstractVector
+    lamb_diff::AbstractFloat
+    lamb_alg::AbstractFloat
+
+    function LinearTestSPP(eps::Float64)
+        lamb_diff = 2.0
+        lamb_alg = -1.0
+
+        A = [lamb_diff lamb_alg; lamb_diff / eps -lamb_alg / eps]
+
+        return new(A, eps, lamb_diff, lamb_alg)
+    end
 end
 
 function AbstractProblem.f(problem::LinearTestSPP, t, u)
@@ -40,19 +51,13 @@ end
 # Implement the exact solution function
 function AbstractProblem.u_exact(problem::LinearTestSPP, t)
     if t == 0.0
-        return problem.u0
+        return [
+            exp(2 * problem.lamb_diff * t),
+            problem.lamb_diff / problem.lamb_alg * exp(2 * problem.lamb_diff * t)
+        ]
     else
         throw(Errors.NotImplementedError("Exact solution is only available at t = 0.0 for this problem."))
     end
-end
-
-function AbstractProblem.initialize_problem(::Type{LinearTestSPP}, eps, t0)
-    lamb_diff = 2.0
-    lamb_alg = -1.0
-
-    A = [lamb_diff lamb_alg; lamb_diff / eps -lamb_alg / eps]
-    u0 = [exp(2 * lamb_diff * t0), lamb_diff / lamb_alg * exp(2 * lamb_diff * t0)]
-    return LinearTestSPP(A, eps, u0)
 end
 
 end
