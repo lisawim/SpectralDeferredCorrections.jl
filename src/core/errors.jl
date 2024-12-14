@@ -1,13 +1,16 @@
 module Errors
 
-export NotImplementedError
+export ConvergenceError, NotImplementedError
 
-# Define a custom NotImplementedError
+struct ConvergenceError <: Exception
+    msg::String
+end
+Base.showerror(io::IO, e::ConvergenceError) = print(io, e.msg)
+
+
 struct NotImplementedError <: Exception
     msg::String
 end
-
-# Customize the error message display
 Base.showerror(io::IO, e::NotImplementedError) = print(io, e.msg)
 
 end

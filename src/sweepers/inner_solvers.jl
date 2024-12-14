@@ -1,14 +1,17 @@
 module InnerSolvers
 
+using LinearAlgebra
+using SpectralDeferredCorrections
+
 export newton
 
 
-function newton(g::Function, dg::Function, u0, newton_tol, maxiter)
+function newton(g::Function, dg::Function, u0, newton_tol, newton_maxiter)
     u = u0
 
     res = 99
     n = 0
-    while n < maxiter
+    while n < newton_maxiter
         res = norm(g(u), Inf)
 
         # Check if tolerance is already satisfied
@@ -24,6 +27,10 @@ function newton(g::Function, dg::Function, u0, newton_tol, maxiter)
 
         # Increment iteration counter
         n += 1
+    end
+
+    if n == newton_maxiter
+        throw(ConvergenceError("Newton did not converge after $newton_maxiter iterations!"))
     end
 
     return u

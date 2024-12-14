@@ -1,9 +1,11 @@
 module LinearTestEquation
 
-using ..AbstractProblem
-using ..Errors
+using LinearAlgebra
+using SpectralDeferredCorrections
 
-export LinearTestSPP, u_exact
+using ..AbstractProblem
+
+export LinearTestSPP
 
 """
     LinearTestSPP
@@ -67,7 +69,7 @@ function AbstractProblem.u_exact(problem::LinearTestSPP, t)
             problem.lamb_diff / problem.lamb_alg * exp(2 * problem.lamb_diff * t)
         ]
     else
-        throw(Errors.NotImplementedError("Exact solution is only available at t = 0.0 for this problem."))
+        throw(NotImplementedError("Exact solution is only available at t = 0.0 for this problem."))
     end
 end
 
