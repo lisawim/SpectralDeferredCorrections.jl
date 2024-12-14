@@ -2,7 +2,7 @@ module AbstractProblem
 
 using ..Errors
 
-export AbstractDifferentialProblem, f, u_exact, initialize_problem
+export AbstractDifferentialProblem, f, solve, u_exact
 
 """
     AbstractDifferentialProblem
@@ -22,12 +22,12 @@ function f(problem::AbstractDifferentialProblem, t, u)
     throw(NotImplementedError("Right-hand side function must be implemented."))
 end
 
-function u_exact(problem::AbstractDifferentialProblem, t)
-    throw(NotImplementedError("Initial condition must be provided."))
+function solve(problem::AbstractDifferentialProblem, rhs, t, u0, factor)
+    throw(NotImplementedError("Solve routine must be provided."))
 end
 
-function initialize_problem(::Type{T}, t, args...; kwargs...) where {T<:AbstractDifferentialProblem}
-    throw(NotImplementedError("initialize_problem must be implemented for type $T."))
+function u_exact(problem::AbstractDifferentialProblem, t)
+    throw(NotImplementedError("Initial condition must be provided."))
 end
 
 end
