@@ -9,6 +9,8 @@ using SpectralDeferredCorrections
 
     @test_throws NotImplementedError f(dummy_problem, 0.0, [1.0, 2.0])
 
+    @test_throws NotImplementedError solve(dummy_problem, [2.0, 1.0], 0.0, [0.0, 0.0], 0.1)
+
     @test_throws NotImplementedError u_exact(dummy_problem, 0.0)
 end
 

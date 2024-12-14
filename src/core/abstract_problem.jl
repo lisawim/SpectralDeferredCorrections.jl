@@ -2,7 +2,7 @@ module AbstractProblem
 
 using ..Errors
 
-export AbstractDifferentialProblem, f, u_exact
+export AbstractDifferentialProblem, f, solve, u_exact
 
 """
     AbstractDifferentialProblem
@@ -20,6 +20,10 @@ abstract type AbstractDifferentialProblem end
 
 function f(problem::AbstractDifferentialProblem, t, u)
     throw(NotImplementedError("Right-hand side function must be implemented."))
+end
+
+function solve(problem::AbstractDifferentialProblem, rhs, t, u0, factor)
+    throw(NotImplementedError("Solve routine must be provided."))
 end
 
 function u_exact(problem::AbstractDifferentialProblem, t)

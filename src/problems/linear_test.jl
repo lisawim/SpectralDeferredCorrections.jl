@@ -33,19 +33,30 @@ struct LinearTestSPP <: AbstractProblem.AbstractDifferentialProblem
     eps::AbstractFloat
     lamb_diff::AbstractFloat
     lamb_alg::AbstractFloat
+    newton_tol::AbstractFloat
+    newton_maxiter::Integer
 
-    function LinearTestSPP(eps::Float64)
+    function LinearTestSPP(eps::Float64, newton_tol::Float64=1e-12, newton_maxiter::Int64=20)
         lamb_diff = 2.0
         lamb_alg = -1.0
 
         A = [lamb_diff lamb_alg; lamb_diff / eps -lamb_alg / eps]
 
-        return new(A, eps, lamb_diff, lamb_alg)
+        return new(A, eps, lamb_diff, lamb_alg, newton_tol, newton_maxiter)
     end
 end
 
 function AbstractProblem.f(problem::LinearTestSPP, t, u)
     return problem.A * u
+end
+
+function AbstractProblem.solve(problem::LinearTestSPP, rhs, t, u0, factor)
+    g(u) = u - factor * problem.A * u - rhs
+    dg(u) = I(2) - factor * problem.A
+
+    u = newton(g, dg, u0, problem.newton_tol, problem.newton_maxiter)
+
+    return u
 end
 
 # Implement the exact solution function
