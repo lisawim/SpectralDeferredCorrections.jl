@@ -5,7 +5,6 @@ using SpectralDeferredCorrections
 
 export newton
 
-
 function newton(g::Function, dg::Function, u0, newton_tol, newton_maxiter)
     u = u0
 

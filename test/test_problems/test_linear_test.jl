@@ -14,7 +14,7 @@ using LinearAlgebra
 
     lamb_diff = 2.0
     lamb_alg = -1.0
-    A = [lamb_diff lamb_alg; lamb_diff / eps -lamb_alg / eps]
+    A = [lamb_diff lamb_alg; lamb_diff/eps -lamb_alg/eps]
 
     @test u0 == [1.0, -2.0]
 
@@ -43,6 +43,5 @@ end
     u = solve(lin_problem, rhs, t0, u0, factor)
 
     u_ex = inv(I(2) - factor * lin_problem.A) * rhs
-    @test u == u_ex   
-
+    @test u == u_ex
 end
