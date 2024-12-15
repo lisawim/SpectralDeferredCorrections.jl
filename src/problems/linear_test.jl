@@ -18,17 +18,20 @@ Represents a linear singular perturbation problem of the form:
 for perturbation parameter `eps`.
 
 ### Fields
-- `A::AbstractMatrix`: The coefficient matrix defining the linear operator.
-- `eps::AbstractFloat`: The perturbation parameter.
-- `lamb_diff::AbstractFloat`: Parameter from the problem.
-- `lamb_alg::AbstractFloat`: Parameter from the problem.
+
+  - `A::AbstractMatrix`: The coefficient matrix defining the linear operator.
+  - `eps::AbstractFloat`: The perturbation parameter.
+  - `lamb_diff::AbstractFloat`: Parameter from the problem.
+  - `lamb_alg::AbstractFloat`: Parameter from the problem.
 
 ### Example
+
 ```julia
-A = [lamb_diff lamb_alg; lamb_diff / eps -lamb_alg / eps]
+A = [lamb_diff lamb_alg; lamb_diff/eps -lamb_alg/eps]
 eps = 1e-3
 u0 = [exp(2 * lamb_diff * t), lamb_diff / lamb_alg * exp(2 * lamb_diff * t)]
 problem = LinearTestSPP(eps)
+```
 """
 struct LinearTestSPP <: AbstractProblem.AbstractDifferentialProblem
     A::AbstractMatrix
@@ -38,11 +41,12 @@ struct LinearTestSPP <: AbstractProblem.AbstractDifferentialProblem
     newton_tol::AbstractFloat
     newton_maxiter::Integer
 
-    function LinearTestSPP(eps::Float64, newton_tol::Float64=1e-12, newton_maxiter::Int64=20)
+    function LinearTestSPP(
+            eps::Float64, newton_tol::Float64 = 1e-12, newton_maxiter::Int64 = 20)
         lamb_diff = 2.0
         lamb_alg = -1.0
 
-        A = [lamb_diff lamb_alg; lamb_diff / eps -lamb_alg / eps]
+        A = [lamb_diff lamb_alg; lamb_diff/eps -lamb_alg/eps]
 
         return new(A, eps, lamb_diff, lamb_alg, newton_tol, newton_maxiter)
     end

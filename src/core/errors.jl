@@ -7,7 +7,6 @@ struct ConvergenceError <: Exception
 end
 Base.showerror(io::IO, e::ConvergenceError) = print(io, e.msg)
 
-
 struct NotImplementedError <: Exception
     msg::String
 end
