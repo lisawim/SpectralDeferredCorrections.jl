@@ -1,7 +1,6 @@
 using Test
 using SpectralDeferredCorrections
 
-
 include("test_core/test_problem_ode.jl")
 include("test_core/test_errors.jl")
 
