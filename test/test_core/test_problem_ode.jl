@@ -3,7 +3,7 @@ using SpectralDeferredCorrections
 
 @testset "AbstractProblem Tests" begin
     # Test that calling u_exact on an abstract type raises NotImplementedError
-    struct DummyProblem <: AbstractDifferentialProblem end
+    struct DummyProblem <: AbstractProblemODE end
 
     dummy_problem = DummyProblem()
 
@@ -15,7 +15,7 @@ using SpectralDeferredCorrections
 end
 
 @testset "AbstractProblem Interface Compatibility" begin
-    struct DummyProblem2 <: AbstractDifferentialProblem
+    struct DummyProblem2 <: AbstractProblemODE
         A::Matrix{Float64}
         b::Vector{Float64}
         y0::Vector{Float64}
@@ -49,7 +49,7 @@ end
     @test f(dummy_problem2, t0, y0) == A * y0 + b
 
     @test dummy_problem2 isa DummyProblem2
-    @test dummy_problem2 isa AbstractDifferentialProblem
+    @test dummy_problem2 isa AbstractProblemODE
 
     # Test that u_exact raises an error for t ≠ 0.0
     @test_throws NotImplementedError u_exact(dummy_problem2, 1.0)
