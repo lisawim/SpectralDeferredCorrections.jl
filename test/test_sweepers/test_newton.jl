@@ -13,9 +13,9 @@ using LinearAlgebra
     # Since we have a linear problem Newton does need only one iteration to converge
     newton_tol = 1e-12
     newton_maxiter = 10
-    println("Linear solve")
+
     u_ex = inv(A) * b
-    println(u_ex)
+
     # Note that Newton does need one iteration to solve the problem exact
     u = newton(g, dg, u0, newton_tol, newton_maxiter)
 

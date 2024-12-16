@@ -1,8 +1,7 @@
 using Test
 using SpectralDeferredCorrections
-import .AbstractProblem
 
-include("test_core/test_abstract_problem.jl")
+include("test_core/test_problem_ode.jl")
 include("test_core/test_errors.jl")
 
 include("test_problems/test_linear_test.jl")

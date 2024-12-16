@@ -3,7 +3,7 @@ module LinearTestEquation
 using LinearAlgebra
 using SpectralDeferredCorrections
 
-using ..AbstractProblem
+using ..ProblemODEBase
 
 export LinearTestSPP
 
@@ -33,7 +33,7 @@ u0 = [exp(2 * lamb_diff * t), lamb_diff / lamb_alg * exp(2 * lamb_diff * t)]
 problem = LinearTestSPP(eps)
 ```
 """
-struct LinearTestSPP <: AbstractProblem.AbstractDifferentialProblem
+struct LinearTestSPP <: ProblemODEBase.AbstractProblemODE
     A::AbstractMatrix
     eps::AbstractFloat
     lamb_diff::AbstractFloat
@@ -52,11 +52,11 @@ struct LinearTestSPP <: AbstractProblem.AbstractDifferentialProblem
     end
 end
 
-function AbstractProblem.f(problem::LinearTestSPP, t, u)
+function ProblemODEBase.f(problem::LinearTestSPP, t, u)
     return problem.A * u
 end
 
-function AbstractProblem.solve(problem::LinearTestSPP, rhs, t, u0, factor)
+function ProblemODEBase.solve(problem::LinearTestSPP, rhs, t, u0, factor)
     g(u) = u - factor * problem.A * u - rhs
     dg(u) = I(2) - factor * problem.A
 
@@ -66,7 +66,7 @@ function AbstractProblem.solve(problem::LinearTestSPP, rhs, t, u0, factor)
 end
 
 # Implement the exact solution function
-function AbstractProblem.u_exact(problem::LinearTestSPP, t)
+function ProblemODEBase.u_exact(problem::LinearTestSPP, t)
     if t == 0.0
         return [
             exp(2 * problem.lamb_diff * t),
