@@ -5,7 +5,7 @@ using ..Errors
 export AbstractSweeper, predict_step, update_step, compute_residual, compute_last_node
 
 
-struct type AbstractSweeper end
+abstract type AbstractSweeper end
 
 
 function predict_step(sweeper::AbstractSweeper)

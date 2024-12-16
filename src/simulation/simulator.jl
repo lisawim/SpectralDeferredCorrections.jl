@@ -2,10 +2,17 @@ module Simulation
 
 using SpectralDeferredCorrections
 
+using ..AbstractSimulation
+using ..AbstractProblem
+using ..AbstractNumericalMethod
 
-struct Simulator <: AbstractSimulator
+
+export Simulator
+
+
+struct Simulator <: AbstractSimulation.AbstractSimulator
     problem::AbstractDifferentialProblem
-    sweeper::AbstractNumericalMethod
+    sweeper::AbstractSweeper
     t0::AbstractFloat
     dt::AbstractFloat
     Tend::AbstractFloat
@@ -13,11 +20,11 @@ struct Simulator <: AbstractSimulator
     maxiter::Integer
 end
 
-function AbstractSimulator.run(simulator::Simulator)
+function AbstractSimulation.run_simulation(simulator::Simulator)
     t0, dt, Tend = simulator.t0, simulator.dt, simulator.Tend
 
     t = t0
-    u = prob.u0
+    u = simulator.problem.u0
     ts = [t]
     us = [u]
 
@@ -25,14 +32,16 @@ function AbstractSimulator.run(simulator::Simulator)
         # Handle the final step to avoid overshooting
         dt_actual = min(dt, Tend - t)
 
-        iterate(simulator)
+        #iterate(simulator)
 
+        t += dt_actual
+        print("t=$t")
         
     end
 
 end
 
-function AbstractSimulator.iterate(simulator::Simulator)
+function AbstractSimulation.iterate(simulator::Simulator)
     iter = 0
 
     while !converged
@@ -50,7 +59,7 @@ function AbstractSimulator.iterate(simulator::Simulator)
 
 end
 
-function AbstractSimulator.check_convergence(simulator::Simulator, iter::Integer)
+function AbstractSimulation.check_convergence(simulator::Simulator, iter::Integer)
     restol = simulator.restol
     maxiter = simulator.maxiter
 

@@ -2,12 +2,12 @@ module AbstractSimulation
 
 using ..Errors
 
-export AbstractSimulator, run, iterate, check_convergence
+export AbstractSimulator, run_simulation, iterate, check_convergence
 
 
-struct type AbstractSimulator end
+abstract type AbstractSimulator end
 
-function run(simulator::AbstractSimulator)
+function run_simulation(simulator::AbstractSimulator)
     throw(NotImplementedError("run function is not implemented!"))
 end
 
