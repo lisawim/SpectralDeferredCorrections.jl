@@ -6,6 +6,7 @@ using LinearAlgebra
 include(joinpath(@__DIR__, "core/errors.jl"))
 include(joinpath(@__DIR__, "core/simulation.jl"))
 include(joinpath(@__DIR__, "core/problem_ode.jl"))
+include(joinpath(@__DIR__, "core/step.jl"))
 
 # Include problem files
 include(joinpath(@__DIR__, "problems/linear_test.jl"))
@@ -21,6 +22,7 @@ using .SimulationBase
 using .LinearTestEquation
 using .InnerSolvers
 using .Simulation
+using .StepBase
 
 export AbstractProblemODE
 export LinearTestSPP, f, solve, u_exact
@@ -30,5 +32,7 @@ export newton
 export AbstractSimulator
 export run_simulation
 export Simulator
+
+export Step, ConvergenceState
 
 end
