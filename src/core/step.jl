@@ -13,18 +13,18 @@ struct ConvergenceState
     end
 end
 
-struct Step
+struct Step{T}
     problem::AbstractProblemODE
     state::ConvergenceState
     t0::Float64
     dt::Float64
     Tend::Float64
-    u0::AbstractVector
+    u0::Vector{T}
 
     function Step(problem::AbstractProblemODE, t0::Float64, dt::Float64, Tend::Float64,
-            restol::Float64, maxiter::Integer, u0::AbstractVector)
+            restol::Float64, maxiter::Integer, u0::Vector{T}) where {T}
         state = ConvergenceState(restol, maxiter)
-        return new(problem, state, t0, dt, Tend, u0)
+        return new{T}(problem, state, t0, dt, Tend, u0)
     end
 end
 

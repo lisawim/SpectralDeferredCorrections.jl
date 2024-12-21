@@ -1,6 +1,10 @@
 module SpectralDeferredCorrections
 
 using LinearAlgebra
+using Profile
+using ProfileView
+using BenchmarkTools
+using StaticArrays
 
 # Include core modules
 include(joinpath(@__DIR__, "core/errors.jl"))
