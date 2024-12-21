@@ -42,8 +42,14 @@ function run_simulation(simulator::Simulator)
         iterate(sim)
         t += dt_actual
 
+        push!(us, u)
+        push!(ts, t)
+
         println("t=$t and u0=$(sim.u0)")
     end
+    
+    return ts, us
+
 end
 
 function iterate(simulator::Simulator)
