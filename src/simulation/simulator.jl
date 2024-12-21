@@ -47,9 +47,8 @@ function run_simulation(simulator::Simulator)
 
         println("t=$t and u0=$(sim.u0)")
     end
-    
-    return ts, us
 
+    return ts, us
 end
 
 function iterate(simulator::Simulator)
