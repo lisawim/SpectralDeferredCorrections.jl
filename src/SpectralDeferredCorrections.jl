@@ -1,6 +1,7 @@
 module SpectralDeferredCorrections
 
 using LinearAlgebra
+using StaticArrays
 
 # Include core modules
 include(joinpath(@__DIR__, "core/errors.jl"))

@@ -1,7 +1,8 @@
 module LinearTestEquation
 
-using LinearAlgebra
 using SpectralDeferredCorrections
+using LinearAlgebra
+using StaticArrays
 
 using ..ProblemODEBase
 
@@ -36,20 +37,21 @@ problem = LinearTestSPP(eps)
 ```
 """
 struct LinearTestSPP <: ProblemODEBase.AbstractProblemODE
-    A::AbstractMatrix
-    eps::AbstractFloat
-    lamb_diff::AbstractFloat
-    lamb_alg::AbstractFloat
-    newton_tol::AbstractFloat
-    newton_maxiter::Integer
+    A::SMatrix{2, 2, Float64}
+    eps::Float64
+    lamb_diff::Float64
+    lamb_alg::Float64
+    newton_tol::Float64
+    newton_maxiter::Int
 
     function LinearTestSPP(
-            eps::Float64, newton_tol::Float64 = 1e-12, newton_maxiter::Int64 = 20)
-        lamb_diff = 2.0
-        lamb_alg = -1.0
-
-        A = [lamb_diff lamb_alg; lamb_diff/eps -lamb_alg/eps]
-
+            eps::Float64;
+            lamb_diff::Float64 = 2.0,
+            lamb_alg::Float64 = -1.0,
+            newton_tol::Float64 = 1e-12,
+            newton_maxiter::Int = 20
+    )
+        A = @SMatrix [lamb_diff lamb_alg; lamb_diff/eps -lamb_alg/eps]
         return new(A, eps, lamb_diff, lamb_alg, newton_tol, newton_maxiter)
     end
 end
@@ -60,14 +62,11 @@ end
 
 function solve(problem::LinearTestSPP, rhs, t, u0, factor)
     g(u) = u - factor * problem.A * u - rhs
-    dg(u) = I(2) - factor * problem.A
+    dg(u) = I - factor * problem.A
 
-    u = newton(g, dg, u0, problem.newton_tol, problem.newton_maxiter)
-
-    return u
+    return newton(g, dg, u0, problem.newton_tol, problem.newton_maxiter)
 end
 
-# Implement the exact solution function
 function u_exact(problem::LinearTestSPP, t)
     if t == 0.0
         return [
