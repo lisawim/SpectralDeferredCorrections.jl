@@ -3,3 +3,7 @@ src/problems/*.cov
 test/*.cov
 lcov.info
 codecov
+src/core/*.cov
+src/sweepers/*.cov
+test/test_core/*.cov
+test/test_sweepers/*.cov
