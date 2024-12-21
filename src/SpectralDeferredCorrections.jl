@@ -1,9 +1,11 @@
 module SpectralDeferredCorrections
 
 using LinearAlgebra
+using PyCall
 
 # Include core modules
 include(joinpath(@__DIR__, "core/errors.jl"))
+include(joinpath(@__DIR__, "core/collocation.jl"))
 include(joinpath(@__DIR__, "core/simulation.jl"))
 include(joinpath(@__DIR__, "core/problem_ode.jl"))
 include(joinpath(@__DIR__, "core/step.jl"))
@@ -18,6 +20,7 @@ include(joinpath(@__DIR__, "simulation/simulator.jl"))
 
 using .ProblemODEBase
 using .Errors
+using .CollocationBase
 using .SimulationBase
 using .LinearTestEquation
 using .InnerSolvers
@@ -26,7 +29,11 @@ using .StepBase
 
 export AbstractProblemODE
 export LinearTestSPP, f, solve, u_exact
+
 export ConvergenceError, NotImplementedError
+
+export Collocation
+
 export newton
 
 export AbstractSimulator
