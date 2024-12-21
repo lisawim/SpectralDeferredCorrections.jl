@@ -2,28 +2,33 @@ module FullyImplicitSDC
 
 using SpectralDeferredCorrections
 
-using ..AbstractNumericalMethod
+using ..ProblemODEBase
+using ..SweeperBase
 
 export FullyImplicitSDCSweeper
 
 
-struct FullyImplicitSDCSweeper <: AbstractNumericalMethod.AbstractSweeper
-    
+struct FullyImplicitSDCSweeper <: SweeperBase.AbstractSweeper
+    #sollocation::
 end
 
-function AbstractNumericalMethod.predict_step(sweeper::FullyImplicitSDCSweeper)
+function FullyImplicitSDCSweeper(num_nodes)
+
+end
+
+function SweeperBase.predict_step(problem::AbstractProblemODE, sweeper::FullyImplicitSDCSweeper)
     return 0
 end
 
-function AbstractNumericalMethod.update_step(sweeper::FullyImplicitSDCSweeper)
+function SweeperBase.update_step(problem::AbstractProblemODE, sweeper::FullyImplicitSDCSweeper)
     return 0
 end
 
-function AbstractNumericalMethod.compute_residual(sweeper::FullyImplicitSDCSweeper)
+function SweeperBase.compute_residual(problem::AbstractProblemODE, sweeper::FullyImplicitSDCSweeper)
     return 0
 end
 
-function AbstractNumericalMethod.compute_last_node(sweeper::FullyImplicitSDCSweeper)
+function SweeperBase.compute_last_node(problem::AbstractProblemODE, sweeper::FullyImplicitSDCSweeper)
     return 0
 end
 

@@ -5,7 +5,7 @@ using SpectralDeferredCorrections
 
 export newton
 
-function newton(g::Function, dg::Function, u0, newton_tol, newton_maxiter)
+function newton(g::Function, dg::Function, u0, newton_tol, newton_maxiter, dg_inv::Function=nothing)
     u = u0
 
     res = 99
@@ -19,7 +19,11 @@ function newton(g::Function, dg::Function, u0, newton_tol, newton_maxiter)
         end
 
         # Compute Newton direction
-        Δu = -dg(u) \ g(u)
+        if isnothing(dg_inv)
+            Δu = -dg(u) \ g(u)
+        else
+            Δu = -dg_inv(u) * g(u)
+        end
 
         # Newton update
         u += Δu
