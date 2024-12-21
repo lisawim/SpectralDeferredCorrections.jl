@@ -5,6 +5,8 @@ using SpectralDeferredCorrections
 
 using ..ProblemODEBase
 
+import ..ProblemODEBase: f, solve, u_exact
+
 export LinearTestSPP
 
 """
@@ -52,11 +54,11 @@ struct LinearTestSPP <: ProblemODEBase.AbstractProblemODE
     end
 end
 
-function ProblemODEBase.f(problem::LinearTestSPP, t, u)
+function f(problem::LinearTestSPP, t, u)
     return problem.A * u
 end
 
-function ProblemODEBase.solve(problem::LinearTestSPP, rhs, t, u0, factor)
+function solve(problem::LinearTestSPP, rhs, t, u0, factor)
     g(u) = u - factor * problem.A * u - rhs
     dg(u) = I(2) - factor * problem.A
 
@@ -66,7 +68,7 @@ function ProblemODEBase.solve(problem::LinearTestSPP, rhs, t, u0, factor)
 end
 
 # Implement the exact solution function
-function ProblemODEBase.u_exact(problem::LinearTestSPP, t)
+function u_exact(problem::LinearTestSPP, t)
     if t == 0.0
         return [
             exp(2 * problem.lamb_diff * t),
