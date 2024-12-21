@@ -2,6 +2,7 @@ module SpectralDeferredCorrections
 
 using LinearAlgebra
 using PyCall
+using StaticArrays
 
 # Include core modules
 include(joinpath(@__DIR__, "core/errors.jl"))
