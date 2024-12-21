@@ -20,15 +20,19 @@ end
 @testset "Simulator - check initialization" begin
     t0, dt, Tend, restol, maxiter, sim = test_setup()
 
-    @test sim.problem isa AbstractProblemODE
-    @test sim.problem isa LinearTestSPP
+    S = sim.step
 
-    @test sim.t0 == t0
-    @test sim.dt == dt
-    @test sim.Tend == Tend
+    @test S.problem isa AbstractProblemODE
+    @test S.problem isa LinearTestSPP
 
-    @test sim.restol == restol
-    @test sim.maxiter == maxiter
+    @test S.t0 == t0
+    @test S.dt == dt
+    @test S.Tend == Tend
+
+    @test S.state isa ConvergenceState
+
+    @test S.state.restol == restol
+    @test S.state.maxiter == maxiter
 end
 
 @testset "Simulator - check run_simulation" begin
@@ -37,5 +41,5 @@ end
     ts, us = run_simulation(sim)
 
     @test ts[end] == Tend
-    @test us[end] == sim.u0
+    @test us[end] == sim.step.u0
 end
