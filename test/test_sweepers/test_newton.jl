@@ -10,10 +10,12 @@ using LinearAlgebra
     dg(u) = A
 
     # Note that Newton does need one iteration to solve the problem exact
-    u0 = [0.0, 0.4]
-    u = newton_vector(g, dg, u0, 1e-12, 10)
+    u0 = [0.0, 0.0]
+    u = newton_vector(g, dg, u0, 1e-12, 1)
 
     @test isapprox(u, A \ b)
+
+    @test_throws ConvergenceError newton_vector(g, dg, u0, 1e-13, 0)
 end
 
 @testset "Newton for nonlinear function" begin

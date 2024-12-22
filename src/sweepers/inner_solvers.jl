@@ -18,7 +18,7 @@ function newton_scalar(
 
         # Check if tolerance is satisfied
         if res_norm < newton_tol
-            return u
+            break
         end
 
         # Compute Newton step
@@ -30,7 +30,16 @@ function newton_scalar(
         n += 1
     end
 
-    throw(ConvergenceError("Newton did not converge after $newton_maxiter iterations!"))
+    residual = g(u)
+    res_norm = abs(residual)
+    if res_norm < newton_tol
+        return u
+    end
+
+    throw(ConvergenceError("Newton did not converge after $n iterations!"))
+
+    return u
+
 end
 
 function newton_vector(g::Function, dg::Function, u0::Vector{T},
@@ -39,8 +48,6 @@ function newton_vector(g::Function, dg::Function, u0::Vector{T},
     Δu = copy(u0)  # Preallocate Δu
     residual = copy(u0)
     n = 0
-
-    #factorized_dg = factorize(dg(u))
 
     while n < newton_maxiter
         residual .= g(u)
@@ -60,7 +67,14 @@ function newton_vector(g::Function, dg::Function, u0::Vector{T},
         n += 1
     end
 
-    throw(ConvergenceError("Newton did not converge after $newton_maxiter iterations!"))
+    residual .= g(u)
+    res_norm = norm(residual, Inf)
+    if res_norm < newton_tol
+        return u
+    end
+
+    throw(ConvergenceError("Newton did not converge after $n iterations!"))
+
 end
 
 end
