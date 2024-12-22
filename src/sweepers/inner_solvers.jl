@@ -37,8 +37,6 @@ function newton_scalar(
     end
 
     throw(ConvergenceError("Newton did not converge after $n iterations!"))
-
-    return u
 end
 
 function newton_vector(g::Function, dg::Function, u0::Vector{T},
