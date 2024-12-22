@@ -8,14 +8,16 @@ using SpectralDeferredCorrections
     Base.showerror(io, e)
     exception_message = String(take!(io))
 
-    @test exception_message == "Numerical method does not converge after maximum number of iterations."
+    @test exception_message ==
+          "Numerical method does not converge after maximum number of iterations."
 
     # Test the error when thrown in a try-catch block
     try
         throw(e)
     catch err
         @test isa(err, ConvergenceError)
-        @test err.msg == "Numerical method does not converge after maximum number of iterations."
+        @test err.msg ==
+              "Numerical method does not converge after maximum number of iterations."
     end
 end
 
