@@ -3,45 +3,34 @@ using SpectralDeferredCorrections
 using LinearAlgebra
 
 @testset "Linear Test SPP - check initialization" begin
-    eps = 1e-1
+    prob = LinearTestSPP(1.0)
 
-    lin_problem = LinearTestSPP(eps)
+    @test prob isa LinearTestSPP
 
-    @test lin_problem isa LinearTestSPP
+    @test isapprox(prob.A, [2.0 -1.0; 2.0 1.0])
 
-    t0 = 0.0
-    u0 = u_exact(lin_problem, t0)
+    @test u_exact(prob, 0.0) == [1.0, -2.0]
 
-    lamb_diff = 2.0
-    lamb_alg = -1.0
-    A = [lamb_diff lamb_alg; lamb_diff/eps -lamb_alg/eps]
+    rhs = f(prob, 0.0, [1.0, -2.0])
 
-    @test u0 == [1.0, -2.0]
+    @test rhs == prob.A * [1.0, -2.0]
 
-    rhs = f(lin_problem, t0, u0)
+    @test rhs == f(prob, 0.0, [1.0, -2.0])
 
-    @test rhs == lin_problem.A * u0
-
-    @test rhs == f(lin_problem, t0, u0)
-
-    @test u_exact(lin_problem, t0) == u0
+    @test u_exact(prob, 0.0) == [1.0, -2.0]
 
     # Test that it raises an error for t ≠ 0.0
-    @test_throws NotImplementedError u_exact(lin_problem, 1.0)
+    @test_throws NotImplementedError u_exact(prob, 1.0)
 end
 
 @testset "LinearTestSPP - check solve" begin
-    eps = 1.0
+    prob = LinearTestSPP(1.0)
 
-    lin_problem = LinearTestSPP(eps)
-
-    t0 = 0.0
-    u0 = u_exact(lin_problem, t0)
+    u0 = u_exact(prob, 0.0)
     rhs = u0
     factor = 1.0
 
-    u = solve(lin_problem, rhs, t0, u0, factor)
+    u = solve(prob, u0, 0.0, u0, 1.0)
 
-    u_ex = inv(I(2) - factor * lin_problem.A) * rhs
-    @test u == u_ex
+    @test u == inv(I(2) - 1.0 * prob.A) * rhs
 end

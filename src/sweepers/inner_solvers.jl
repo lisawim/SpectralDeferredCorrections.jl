@@ -2,10 +2,12 @@ module InnerSolvers
 
 using LinearAlgebra
 using SpectralDeferredCorrections
+using ..Errors
 
 export newton
 
 function newton(g::Function, dg::Function, u0, newton_tol, newton_maxiter)
+
     u = u0
 
     res = 99
