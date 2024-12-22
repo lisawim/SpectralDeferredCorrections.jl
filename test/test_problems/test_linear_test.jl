@@ -27,10 +27,10 @@ end
     prob = LinearTestSPP(1.0)
 
     u0 = u_exact(prob, 0.0)
-    rhs = u0
     factor = 1.0
+    rhs = copy(u0)
 
-    u = solve(prob, u0, 0.0, u0, 1.0)
+    u = solve(prob, rhs, 0.0, u0, 1.0)
 
-    @test u == inv(I(2) - 1.0 * prob.A) * rhs
+    @test u == (I - 1.0 * prob.A) \ rhs
 end

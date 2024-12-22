@@ -1,39 +1,67 @@
 module InnerSolvers
 
 using LinearAlgebra
+using StaticArrays
 using SpectralDeferredCorrections
 using ..Errors
 
-export newton
+export newton_scalar, newton_vector
 
-function newton(g::Function, dg::Function, u0, newton_tol, newton_maxiter)
+function newton_scalar(g::Function, dg::Function, u0::Float64, newton_tol::Float64, newton_maxiter::Int)
     u = u0
-
-    res = 99
     n = 0
-    while n < newton_maxiter
-        res = norm(g(u), Inf)
 
-        # Check if tolerance is already satisfied
-        if res < newton_tol
-            break
+    while n < newton_maxiter
+        residual = g(u)
+        res_norm = abs(residual)
+
+        # Check if tolerance is satisfied
+        if res_norm < newton_tol
+            return u
         end
 
-        # Compute Newton direction
-        Δu = -dg(u) \ g(u)
+        # Compute Newton step
+        Δu = -g(u) / dg(u)
 
-        # Newton update
+        # Update u
         u += Δu
 
-        # Increment iteration counter
         n += 1
     end
 
-    if n == newton_maxiter
-        throw(ConvergenceError("Newton did not converge after $newton_maxiter iterations!"))
+    throw(ConvergenceError("Newton did not converge after $newton_maxiter iterations!"))
+
+end
+
+function newton_vector(g::Function, dg::Function, u0::Vector{T}, newton_tol::Float64, newton_maxiter::Int) where T
+    u = MArray{Tuple{length(u0)}, T}(u0)  # Use MArray for mutability  # Convert to a static array
+    Δu = copy(u0)  # Preallocate Δu
+    residual = copy(u0)
+    n = 0
+
+    #factorized_dg = factorize(dg(u))
+
+    while n < newton_maxiter
+        residual .= g(u)
+        res_norm = norm(residual, Inf)
+
+        # Check if tolerance is satisfied
+        if res_norm < newton_tol
+            return u
+        end
+
+        # Compute Newton step
+        Δu .= -dg(u) \ residual
+
+        # Update u
+        u .= u .+ Δu
+
+        n += 1
     end
 
-    return u
+    throw(ConvergenceError("Newton did not converge after $newton_maxiter iterations!"))
+
 end
+
 
 end

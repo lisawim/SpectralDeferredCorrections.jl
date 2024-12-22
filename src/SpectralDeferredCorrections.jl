@@ -28,7 +28,7 @@ using .StepBase
 export AbstractProblemODE
 export LinearTestSPP, f, solve, u_exact
 export ConvergenceError, NotImplementedError
-export newton
+export newton_scalar, newton_vector
 
 export AbstractSimulator
 export run_simulation
