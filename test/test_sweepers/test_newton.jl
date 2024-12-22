@@ -4,22 +4,18 @@ using LinearAlgebra
 
 @testset "Newton for linear system" begin
     A = [1.0 2.0; 3.0 4.0]
-    u0 = [0.0, 0.4]
     b = [1.0, 2.0]
 
     g(u) = A * u - b
     dg(u) = A
 
-    # Since we have a linear problem Newton does need only one iteration to converge
-    newton_tol = 1e-12
-    newton_maxiter = 10
-
-    u_ex = inv(A) * b
-
     # Note that Newton does need one iteration to solve the problem exact
-    u = newton(g, dg, u0, newton_tol, newton_maxiter)
+    u0 = [0.0, 0.0]
+    u = newton_vector(g, dg, u0, 1e-12, 1)
 
-    @test norm(u - u_ex) < 1e-14
+    @test isapprox(u, A \ b)
+
+    @test_throws ConvergenceError newton_vector(g, dg, u0, 1e-13, 0)
 end
 
 @testset "Newton for nonlinear function" begin
@@ -28,13 +24,11 @@ end
     g(u) = cos(u) - u^3
     dg(u) = -sin(u) - 3 * u^2
 
-    newton_tol = 1e-12
-    newton_maxiter = 20
+    u = newton_scalar(g, dg, u0, 1e-12, 20)
 
-    u = newton(g, dg, u0, newton_tol, newton_maxiter)
     u_ex = 0.86547403310161444662
-    @test norm(u - u_ex) < 1e-14
+    @test isapprox(u, u_ex)
 
     u0_new = 1e5
-    @test_throws ConvergenceError newton(g, dg, u0_new, newton_tol, newton_maxiter)
+    @test_throws ConvergenceError newton_scalar(g, dg, u0_new, 1e-12, 20)
 end

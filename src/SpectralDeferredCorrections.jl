@@ -35,7 +35,7 @@ export ConvergenceError, NotImplementedError
 
 export Collocation
 
-export newton
+export newton_scalar, newton_vector
 
 export AbstractSimulator
 export run_simulation

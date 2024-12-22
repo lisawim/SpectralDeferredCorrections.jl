@@ -2,31 +2,23 @@ using Test
 using SpectralDeferredCorrections
 
 @testset "Step - check initialization" begin
-    eps = 1.0
-    prob = LinearTestSPP(eps)
+    prob = LinearTestSPP(1.0)
 
-    t0 = 0.0
-    dt = 1e-1
-    Tend = 1.0
+    u0 = u_exact(prob, 0.0)
 
-    restol = 1e-12
-    maxiter = 1
-
-    u0 = u_exact(prob, t0)
-
-    step = Step(prob, t0, dt, Tend, restol, maxiter, u0)
+    step = Step(prob, 0.0, 1e-1, 1.0, 1e-12, 1, u0)
 
     @test step isa Step
 
     @test step.problem isa AbstractProblemODE
     @test step.problem isa LinearTestSPP
 
-    @test step.t0 == t0
-    @test step.dt == dt
-    @test step.Tend == Tend
+    @test step.t0 == 0.0
+    @test step.dt == 1e-1
+    @test step.Tend == 1.0
 
     @test step.state isa ConvergenceState
 
-    @test step.state.restol == restol
-    @test step.state.maxiter == maxiter
+    @test step.state.restol == 1e-12
+    @test step.state.maxiter == 1
 end
