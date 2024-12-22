@@ -64,7 +64,9 @@ function solve(problem::LinearTestSPP, rhs, t, u0, factor)
     g(u) = u - factor * problem.A * u - rhs
     dg(u) = I - factor * problem.A
 
-    return newton(g, dg, u0, problem.newton_tol, problem.newton_maxiter)
+    u = newton_vector(g, dg, u0, problem.newton_tol, problem.newton_maxiter)
+
+    return u
 end
 
 function u_exact(problem::LinearTestSPP, t)

@@ -34,23 +34,17 @@ end
         return problem.A * u + problem.b
     end
 
-    t0 = 0.0
-    y0 = [1.0, 2.0]
-
-    A = [1.0 0.0; 0.0 1.0]
-    b = [1.0, 1.0]
-
     # Create a mock problem instance
-    dummy_problem2 = DummyProblem2(A, b, y0)
+    prob = DummyProblem2([1.0 0.0; 0.0 1.0], [1.0, 1.0], [1.0, 2.0])
 
     # Test u_exact at t = 0.0
-    @test u_exact(dummy_problem2, t0) == y0
+    @test u_exact(prob, 0.0) == [1.0, 2.0]
 
-    @test f(dummy_problem2, t0, y0) == A * y0 + b
+    @test f(prob, 0.0, [1.0, 2.0]) == prob.A * prob.y0 + prob.b
 
-    @test dummy_problem2 isa DummyProblem2
-    @test dummy_problem2 isa AbstractProblemODE
+    @test prob isa DummyProblem2
+    @test prob isa AbstractProblemODE
 
     # Test that u_exact raises an error for t ≠ 0.0
-    @test_throws NotImplementedError u_exact(dummy_problem2, 1.0)
+    @test_throws NotImplementedError u_exact(prob, 1.0)
 end
