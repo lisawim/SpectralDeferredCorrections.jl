@@ -7,7 +7,8 @@ using ..Errors
 
 export newton_scalar, newton_vector
 
-function newton_scalar(g::Function, dg::Function, u0::Float64, newton_tol::Float64, newton_maxiter::Int)
+function newton_scalar(
+        g::Function, dg::Function, u0::Float64, newton_tol::Float64, newton_maxiter::Int)
     u = u0
     n = 0
 
@@ -30,10 +31,10 @@ function newton_scalar(g::Function, dg::Function, u0::Float64, newton_tol::Float
     end
 
     throw(ConvergenceError("Newton did not converge after $newton_maxiter iterations!"))
-
 end
 
-function newton_vector(g::Function, dg::Function, u0::Vector{T}, newton_tol::Float64, newton_maxiter::Int) where T
+function newton_vector(g::Function, dg::Function, u0::Vector{T},
+        newton_tol::Float64, newton_maxiter::Int) where {T}
     u = MArray{Tuple{length(u0)}, T}(u0)  # Use MArray for mutability  # Convert to a static array
     Δu = copy(u0)  # Preallocate Δu
     residual = copy(u0)
@@ -60,8 +61,6 @@ function newton_vector(g::Function, dg::Function, u0::Vector{T}, newton_tol::Flo
     end
 
     throw(ConvergenceError("Newton did not converge after $newton_maxiter iterations!"))
-
 end
-
 
 end

@@ -22,7 +22,7 @@ end
     g(u) = cos(u) - u^3
     dg(u) = -sin(u) - 3 * u^2
 
-    u = newton_scalar(g, dg, u0, 1e-12, 20) 
+    u = newton_scalar(g, dg, u0, 1e-12, 20)
 
     u_ex = 0.86547403310161444662
     @test isapprox(u, u_ex)
