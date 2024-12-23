@@ -36,12 +36,12 @@ using .FullyImplicitSDCSweeper
 export AbstractProblemODE
 export LinearTestSPP, f, solve, u_exact
 
-export ConvergenceError, NotImplementedError
+export ConvergenceError, NotImplementedError, ParameterError
 
 export AbstractSweeper
 export predict_values, update_nodes, compute_residual, compute_last_node
 
-export Collocation
+export Collocation, get_implicit_Qdelta
 
 export FullyImplicitSDC
 

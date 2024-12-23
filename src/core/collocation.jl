@@ -1,57 +1,85 @@
 module CollocationBase
 
 using PyCall
-qmat = pyimport("qmat")
 using ..Errors
 
-export Collocation
+export Collocation, get_implicit_Qdelta
 
 struct Collocation
     num_nodes::Integer
-    node_type::String
     quad_type::String
+    node_type::String
     t_left::Float64
     t_right::Float64
     nodes::Vector{Float64}
     weights::Vector{Float64}
     Q::Matrix{Float64}
-    QD::String
-end
+    QI::String
 
-function Collocation(num_nodes::Integer = nothing, quad_type::String = "RADAU-RIGHT",
-        node_type::String = "LEGENDRE", QD::String = nothing, t_left::Float64 = 0.0, t_right::Float64 = 1.0)
-    if isnothing(num_nodes)
-        throw(Parameter("Number of collocation nodes num_nodes have to be passed!"))
-    end
-
-    if isnothing(QD)
-        throw(ParameterError("Type of QDelta matrix must be provided!"))
-    end
-
-    # Generator for collocation
-    gen = qmat.Q_GENERATORS["Collocation"](
-        nNodes = num_nodes, nodeType = node_type, quadType = quad_type, tLeft = t_left, tRight = t_right
+    # Inner constructor
+    function Collocation(
+        num_nodes::Integer,
+        quad_type::String,
+        node_type::String,
+        t_left::Float64,
+        t_right::Float64,
+        nodes::Vector{Float64},
+        weights::Vector{Float64},
+        Q::Matrix{Float64},
+        QI::String
     )
+        return new(num_nodes, quad_type, node_type, t_left, t_right, nodes, weights, Q, QI)
+    end
 
-    nodes = gen.nodes
-    weights = gen.weights
-    Q = gen.Q
-    return Collocation(
-        num_nodes, node_type, quad_type, t_left, t_right, nodes, weights, Q, QD)
+    # Outer constructor with keyword arguments
+    function Collocation(
+        ; num_nodes::Union{Integer, Nothing} = nothing,
+          quad_type::String = "RADAU-RIGHT",
+          node_type::String = "LEGENDRE",
+          QI::Union{String, Nothing} = nothing,
+          t_left::Float64 = 0.0,
+          t_right::Float64 = 1.0
+    )
+        if isnothing(num_nodes)
+            throw(ParameterError("Number of collocation nodes `num_nodes` must be provided!"))
+        end
+
+        if isnothing(QI)
+            throw(ParameterError("Type of QDelta matrix `QI` must be provided!"))
+        end
+
+        qmat = pyimport("qmat")
+
+        # Generator for collocation
+
+        gen = qmat.Q_GENERATORS["Collocation"](
+            nNodes=num_nodes, nodeType=node_type, quadType=quad_type, tLeft=t_left, tRight=t_right
+        )
+
+        nodes = gen.nodes
+        weights = gen.weights
+        Q = gen.Q
+
+        return Collocation(
+            num_nodes, quad_type, node_type, t_left, t_right, nodes, weights, Q, QI
+        )
+    end
 end
 
-function get_implicit_Qdelta(collocation::Collocation, QI::String, k::Int = nothing)
-    QD_gen = qmat.QDELTA_GENERATORS[collocation.QD]
-    gen = QD_gen(Q = collocation.gen.Q, nNodes = collocation.num_nodes,
+function get_implicit_Qdelta(collocation::Collocation, QI::String, k::Union{Int, Nothing}=nothing)
+    qmat = pyimport("qmat")
+    QI_gen = qmat.QDELTA_GENERATORS[QI]
+    gen = QI_gen(Q = collocation.Q, nNodes = collocation.num_nodes,
         nodeType = collocation.node_type, quadType = collocation.quad_type,
-        nodes = collocation.nodes, tLeft = collocation.tleft
+        nodes = collocation.nodes, tLeft = collocation.t_left
     )
 
     if isnothing(k)
-        return gen.genCoeff(QI)
+        return gen.genCoeffs(QI)
     else
-        return gen.genCoeff(QI, k = k)
+        return gen.genCoeffs(QI, k=k)
     end
+
 end
 
 end
