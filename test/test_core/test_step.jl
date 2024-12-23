@@ -3,7 +3,7 @@ using SpectralDeferredCorrections
 
 @testset "Step - check initialization" begin
     prob = LinearTestSPP(1.0)
-    sweeper = FullyImplicitSDC(num_nodes=3, quad_type="RADAU-RIGHT", QI="IE")
+    sweeper = FullyImplicitSDC(num_nodes = 3, quad_type = "RADAU-RIGHT", QI = "IE")
 
     u0 = u_exact(prob, 0.0)
 

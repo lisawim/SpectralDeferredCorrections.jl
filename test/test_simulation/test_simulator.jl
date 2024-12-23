@@ -5,7 +5,7 @@ function test_setup()
     eps = 1.0
     prob = LinearTestSPP(eps)
 
-    sweeper = FullyImplicitSDC(num_nodes=3, quad_type="RADAU-RIGHT", QI="IE")
+    sweeper = FullyImplicitSDC(num_nodes = 3, quad_type = "RADAU-RIGHT", QI = "IE")
 
     t0 = 0.0
     dt = 1e-1

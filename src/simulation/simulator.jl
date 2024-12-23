@@ -15,7 +15,8 @@ struct Simulator{T} <: AbstractSimulator
     step::Step{T}
 end
 
-function Simulator(problem::AbstractProblemODE, sweeper::AbstractSweeper, t0::Float64, dt::Float64, Tend::Float64,
+function Simulator(problem::AbstractProblemODE, sweeper::AbstractSweeper,
+        t0::Float64, dt::Float64, Tend::Float64,
         restol::Float64, maxiter::Int)
     # Get initial condition at initial time
     u0 = u_exact(problem, t0)

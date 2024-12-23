@@ -23,7 +23,8 @@ struct Step{T}
     Tend::Float64
     u0::Vector{T}
 
-    function Step(problem::AbstractProblemODE, sweeper::AbstractSweeper, t0::Float64, dt::Float64, Tend::Float64,
+    function Step(problem::AbstractProblemODE, sweeper::AbstractSweeper,
+            t0::Float64, dt::Float64, Tend::Float64,
             restol::Float64, maxiter::Integer, u0::Vector{T}) where {T}
         state = ConvergenceState(restol, maxiter)
         return new{T}(problem, sweeper, state, t0, dt, Tend, u0)
