@@ -7,3 +7,5 @@ dependencies:
   - numpy
   - scipy
   - pip
+  - pip:
+      - qmat
