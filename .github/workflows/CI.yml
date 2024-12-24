@@ -35,6 +35,13 @@ jobs:
         conda activate qmat_dependency
         julia --project=@. -e 'ENV["PYTHON"] = joinpath(read(`conda info --base`, String) |> chomp, "envs", "qmat_dependency", "bin", "python"); using Pkg; Pkg.build("PyCall")'
 
+    - name: Debug Python Path
+      run: |
+        source "$(conda info --base)/etc/profile.d/conda.sh"
+        conda activate qmat_dependency
+        echo $PATH
+        python -c "import encodings; print('Encodings module works!')"      
+
     - name: Install Julia dependencies
       run: julia --project=@. -e 'using Pkg; Pkg.instantiate(); Pkg.precompile()'
 
