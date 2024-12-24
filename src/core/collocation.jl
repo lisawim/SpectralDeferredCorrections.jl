@@ -3,7 +3,7 @@ module CollocationBase
 using PyCall
 using ..Errors
 
-export Collocation, get_implicit_Qdelta
+export Collocation, get_implicit_Qdelta, check_key_exists
 
 struct Collocation
     num_nodes::Integer
@@ -46,6 +46,8 @@ struct Collocation
 
         qmat = pyimport("qmat")
 
+        check_key_exists(qmat.Q_GENERATORS, "Collocation")
+
         # Generator for collocation
         gen = qmat.Q_GENERATORS["Collocation"](nNodes = num_nodes, nodeType = node_type,
             quadType = quad_type, tLeft = t_left, tRight = t_right)
@@ -71,6 +73,13 @@ function get_implicit_Qdelta(
         return gen.genCoeffs(QI)
     else
         return gen.genCoeffs(QI, k = k)
+    end
+end
+
+function check_key_exists(dict, key)
+    val = get(dict, key, nothing)
+    if isnothing(val)
+        throw(KeyError("The key `Collocation` does not exist in `qmat.Q_GENERATORS`."))
     end
 end
 

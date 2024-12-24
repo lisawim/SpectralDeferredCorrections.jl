@@ -41,7 +41,7 @@ export ConvergenceError, NotImplementedError, ParameterError
 export AbstractSweeper
 export predict_values, update_nodes, compute_residual, compute_last_node
 
-export Collocation, get_implicit_Qdelta
+export Collocation, get_implicit_Qdelta, check_key_exists
 
 export FullyImplicitSDC
 
