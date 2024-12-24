@@ -44,7 +44,8 @@ struct Collocation
             throw(ParameterError("Type of QDelta matrix `QI` must be provided!"))
         end
 
-        qmat = pyimport("qmat")
+        #qmat = pyimport("qmat")
+        qmat = pyimport_conda("qmat", "qmat")
 
         check_key_exists(qmat.Q_GENERATORS, "Collocation")
 
