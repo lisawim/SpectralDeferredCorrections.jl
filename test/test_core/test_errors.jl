@@ -37,3 +37,20 @@ end
         @test err.msg == "Not implemented!"
     end
 end
+
+@testset "Test ParameterError" begin
+    e = ParameterError("Wrong parameter passed!")
+
+    io = IOBuffer()
+    Base.showerror(io, e)
+    exception_message = String(take!(io))
+
+    @test exception_message == "Wrong parameter passed!"
+
+    try
+        throw(e)
+    catch err
+        @test isa(err, ParameterError)
+        @test err.msg == "Wrong parameter passed!"
+    end
+end
