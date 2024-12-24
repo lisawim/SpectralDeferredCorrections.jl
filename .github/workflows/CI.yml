@@ -15,7 +15,7 @@ jobs:
       with:
         version: '1.11.2'
 
-    - name: Install Python and dependencies
+    - name: Install Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
@@ -27,6 +27,12 @@ jobs:
   
     - name: Configure PyCall to use system Python
       run: julia --project=@. -e 'ENV["PYTHON"] = `which python`; using Pkg; Pkg.build("PyCall")'
+
+    - name: Debug Python environment
+      run: |
+        which python
+        python --version
+        python -c "import qmat; print(qmat.__version__)"
 
     - name: Install dependencies
       run: julia --project=@. -e 'using Pkg; Pkg.instantiate(); Pkg.precompile()'
