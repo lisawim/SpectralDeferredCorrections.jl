@@ -15,13 +15,14 @@ jobs:
       with:
         version: '1.11.2'
 
-    #- name: Set up Miniconda
-    #  uses: conda-incubator/setup-miniconda@v2
-    #  with:
-    #    miniforge-version: "latest"
-    #    environment-file: environment.yml
-    #    activate-environment: qmat_dependency
-    #    use-mamba: false
+    - name: Set up Miniconda
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        miniforge-version: "latest"
+        environment-file: environment.yml
+        activate-environment: qmat_dependency
+        use-mamba: false
+
     - name: Create Python Environment
       run: |
         source "$(conda info --base)/etc/profile.d/conda.sh"
