@@ -1,7 +1,6 @@
 module CollocationBase
 
 using PyCall
-using Conda
 using ..Errors
 
 export Collocation, get_implicit_Qdelta, check_key_exists

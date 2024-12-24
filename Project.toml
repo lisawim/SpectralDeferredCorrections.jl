@@ -4,7 +4,6 @@ authors = ["Lisa Wimmer"]
 version = "1.0.0-DEV"
 
 [deps]
-Conda = "8f4d0f93-b110-5947-807f-2305c1781a2d"
 Coverage = "a2441757-f6aa-5fb2-8edb-039e3f45d037"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 JuliaFormatter = "98e50ef6-434e-11e9-1051-2b60c6c9e899"
@@ -14,7 +13,6 @@ StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 StyledStrings = "f489334b-da3d-4c2e-b8f0-e476e12c162b"
 
 [compat]
-Conda = "1.10.2"
 Coverage = "1.6.1"
 Documenter = "1.8.0"
 JuliaFormatter = "1.0.62"
