@@ -20,16 +20,20 @@ jobs:
       with:
         python-version: '3.11'
 
-    - name: Install pip and qmat
+    - name: Set up Miniconda
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        python-version: 3.11
+        environment-file: environment.yml
+        activate-environment: qmat_dependency
+
+    - name: Configure PyCall to use Conda Python
       run: |
-        python -m pip install --upgrade pip
-        python -m pip install qmat
-  
-    - name: Configure PyCall to use system Python
-      run: julia --project=@. -e 'ENV["PYTHON"] = `which python`; using Pkg; Pkg.build("PyCall")'
+        julia --project=@. -e 'ENV["PYTHON"] = "$(conda info --base)/envs/qmat_dependency/bin/python"; using Pkg; Pkg.build("PyCall")'
 
     - name: Debug Python environment
       run: |
+        conda activate qmat_dependency
         which python
         python --version
         python -c "import qmat; print('qmat module imported successfully')"
