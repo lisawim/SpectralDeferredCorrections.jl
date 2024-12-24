@@ -18,7 +18,7 @@ jobs:
     - name: Set up Miniconda
       uses: conda-incubator/setup-miniconda@v2
       with:
-        miniforge-version: "latest"
+        miniconda-version: "latest"
         environment-file: environment.yml
         activate-environment: qmat_dependency
         use-mamba: false
