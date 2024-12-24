@@ -24,7 +24,7 @@ jobs:
         python -m pip install qmat
   
     - name: Configure PyCall to use system Python
-      run: julia --project=@. -e 'ENV["PYTHON"] = "$(which python)"; using Pkg; Pkg.build("PyCall")'
+      run: julia --project=@. -e 'ENV["PYTHON"] = `which python`; using Pkg; Pkg.build("PyCall")'
 
     - name: Install dependencies
       run: julia --project=@. -e 'using Pkg; Pkg.instantiate(); Pkg.precompile()'
