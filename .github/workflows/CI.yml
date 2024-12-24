@@ -19,12 +19,14 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
-    - run: |
+
+    - name: Install pip and qmat
+      run: |
         python -m pip install --upgrade pip
         python -m pip install qmat
   
     - name: Configure PyCall to use system Python
-      run: julia --project=@. -e 'ENV["PYTHON"] = `which python`; using Pkg; Pkg.build("PyCall")'
+      run: julia --project=@. -e 'ENV["PYTHON"] = `which python`'
 
     - name: Install dependencies
       run: julia --project=@. -e 'using Pkg; Pkg.instantiate(); Pkg.precompile()'
