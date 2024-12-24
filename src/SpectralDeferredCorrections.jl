@@ -2,6 +2,7 @@ module SpectralDeferredCorrections
 
 using LinearAlgebra
 using PyCall
+using Conda
 using StaticArrays
 
 # Include core modules
