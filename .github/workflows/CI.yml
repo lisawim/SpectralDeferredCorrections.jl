@@ -21,6 +21,7 @@ jobs:
         miniforge-version: "latest"
         environment-file: environment.yml
         activate-environment: qmat_dependency
+        use-mamba: false
 
     - name: Debug Python Environment
       run: |
