@@ -24,7 +24,7 @@ jobs:
 
     - name: Configure PyCall to use Conda Python
       run: |
-        julia --project=@. -e 'ENV["PYTHON"] = "$(conda info --base)/envs/qmat_dependency/bin/python"; using Pkg; Pkg.build("PyCall")'
+        julia --project=@. -e 'ENV["PYTHON"] = joinpath(read(chomp(`conda info --base`), String), "envs", "qmat_dependency", "bin", "python"); using Pkg; Pkg.build("PyCall")'
 
     - name: Debug Python environment
       run: |
