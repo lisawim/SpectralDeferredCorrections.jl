@@ -10,14 +10,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Set up Julia
-      uses: julia-actions/setup-julia@v2
-      with:
-        version: '1.11.2'
-
-    - name: Clean Conda
-      run: rm -rf "$(conda info --base)"
-
     - name: Set up Miniconda
       uses: conda-incubator/setup-miniconda@v2
       with:
@@ -25,19 +17,17 @@ jobs:
         environment-file: environment.yml
         activate-environment: qmat_dependency
 
-    - name: Debug Python and Conda
+    - name: Debug Python Environment
       run: |
         source "$(conda info --base)/etc/profile.d/conda.sh"
         conda activate qmat_dependency
-        echo "Base Conda Path: $(conda info --base)"
-        echo "Python Binary: $(which python)"
         python --version
+        python -c "import encodings; print('Encodings module found')"
 
-    - name: Configure PyCall to use Conda Python
+    - name: Configure PyCall
       run: |
         source "$(conda info --base)/etc/profile.d/conda.sh"
         conda activate qmat_dependency
-        export PYTHONPATH="$(conda info --base)/envs/qmat_dependency/lib/python3.10"
         julia --project=@. -e 'ENV["PYTHON"] = joinpath(read(`conda info --base`, String) |> chomp, "envs", "qmat_dependency", "bin", "python"); using Pkg; Pkg.build("PyCall")'
 
     - name: Install Julia dependencies
