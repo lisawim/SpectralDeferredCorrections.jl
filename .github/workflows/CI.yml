@@ -18,20 +18,23 @@ jobs:
     - name: Set up Miniconda
       uses: conda-incubator/setup-miniconda@v2
       with:
-        miniconda-version: "latest"  # Ensure Miniconda is installed
+        miniconda-version: "latest"
         environment-file: environment.yml
         activate-environment: qmat_dependency
 
     - name: Configure PyCall to use Conda Python
       run: |
+        source "$(conda info --base)/etc/profile.d/conda.sh"
+        conda activate qmat_dependency
+        export PYTHONPATH="$(conda info --base)/envs/qmat_dependency/lib/python3.11"
         julia --project=@. -e 'ENV["PYTHON"] = joinpath(read(`conda info --base`, String) |> chomp, "envs", "qmat_dependency", "bin", "python"); using Pkg; Pkg.build("PyCall")'
 
-    #- name: Debug Python environment
-    #  run: |
-    #    conda activate qmat_dependency
-    #    which python
-    #    python --version
-    #    python -c "import qmat; print('qmat module imported successfully')"
+    - name: Validate Python environment
+      run: |
+        source "$(conda info --base)/etc/profile.d/conda.sh"
+        conda activate qmat_dependency
+        python --version
+        python -c "import encodings; print('Encodings module is available')"
 
     - name: Install Julia dependencies
       run: julia --project=@. -e 'using Pkg; Pkg.instantiate(); Pkg.precompile()'
