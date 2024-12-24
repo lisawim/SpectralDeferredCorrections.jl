@@ -10,6 +10,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Set up Julia
+      uses: julia-actions/setup-julia@v2
+      with:
+        version: '1.11.2'
+
     - name: Set up Miniconda
       uses: conda-incubator/setup-miniconda@v2
       with:
