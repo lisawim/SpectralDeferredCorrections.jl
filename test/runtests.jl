@@ -6,6 +6,7 @@ include("test_core/test_problem_ode.jl")
 include("test_core/test_errors.jl")
 include("test_core/test_simulation.jl")
 include("test_core/test_step.jl")
+include("test_core/test_sweeper.jl")
 
 include("test_problems/test_linear_test.jl")
 
