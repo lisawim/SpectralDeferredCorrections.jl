@@ -35,4 +35,10 @@ end
     @test QI isa AbstractMatrix
 
     @test size(QI) == (3, 3)
+
+    QI_MIN = get_implicit_Qdelta(coll, "MIN-SR-FLEX", k = 1)
+
+    @test QI_MIN isa AbstractMatrix
+
+    @test size(QI_MIN) == (3, 3)
 end
