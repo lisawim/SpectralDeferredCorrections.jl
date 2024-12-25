@@ -4,6 +4,7 @@ using SpectralDeferredCorrections
 
 using ..StepBase
 using ..SimulationBase
+using ..SweeperBase
 using ..ProblemODEBase
 
 import ..SimulationBase: run_simulation
@@ -14,13 +15,14 @@ struct Simulator{T} <: AbstractSimulator
     step::Step{T}
 end
 
-function Simulator(problem::AbstractProblemODE, t0::Float64, dt::Float64, Tend::Float64,
+function Simulator(problem::AbstractProblemODE, sweeper::AbstractSweeper,
+        t0::Float64, dt::Float64, Tend::Float64,
         restol::Float64, maxiter::Int)
     # Get initial condition at initial time
     u0 = u_exact(problem, t0)
 
     # Initialize a Step instance
-    step = Step(problem, t0, dt, Tend, restol, maxiter, u0)
+    step = Step(problem, sweeper, t0, dt, Tend, restol, maxiter, u0)
 
     # Return a Simulator instance
     return Simulator{eltype(u0)}(step)

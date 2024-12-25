@@ -3,33 +3,56 @@ name: CI pipeline - SpectralDeferredCorrections.jl
 on: [push, pull_request]
 
 jobs:
-  build:
-    runs-on: macos-latest
-    name: Julia 1.11.2 on macOS
+  test:
+    name: Julia 11.1.2 with Python ${{matrix.python}} on ${{ matrix.os }}  - ${{ github.event_name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        julia-version:
+          - 1.11.2
+        python: [3.11]
+        os:
+          - macOS-latest
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up Julia
-      uses: julia-actions/setup-julia@v2
-      with:
-        version: '1.11.2'
+      - name: Set up Python ${{ matrix.python }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
 
-    - name: Install dependencies
-      run: julia --project=@. -e 'using Pkg; Pkg.instantiate(); Pkg.precompile()'
+      - name: Set ENV Variables for Python
+        run: echo ENV["PYTHON"] = `which python` >> $GITHUB_ENV
 
-    - name: Run tests with coverage
-      run: julia --project=@. --code-coverage test/runtests.jl
+      - name: Install pip and qmat
+        run: |
+          python -m pip install --upgrade pip
+          pip install qmat
 
-    - name: Process coverage
-      uses: julia-actions/julia-processcoverage@v1
-      with:
-        input: src  # Directory to process raw coverage data from
-        output: lcov.info  # Output file name
+      - name: Set up Julia
+        uses: julia-actions/setup-julia@v2
+        with:
+          version: ${{ matrix.julia-version }}
 
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v5
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        file: ./lcov.info
-        fail_ci_if_error: true
+      - uses: julia-actions/julia-buildpkg@v1
+        env:
+          PYTHON : "${{ env.pythonLocation }}/bin/python"
+
+      - name: Run tests with coverage
+        run: julia --project=@. --code-coverage test/runtests.jl
+    
+      - name: Process coverage
+        uses: julia-actions/julia-processcoverage@v1
+        with:
+          input: src
+          output: lcov.info
+    
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./lcov.info
+          fail_ci_if_error: true
