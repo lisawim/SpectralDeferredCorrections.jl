@@ -3,69 +3,56 @@ name: CI pipeline - SpectralDeferredCorrections.jl
 on: [push, pull_request]
 
 jobs:
-  build:
-    runs-on: macos-latest
-    name: Julia 1.11.2 on macOS
+  test:
+    name: Julia 11.1.2 with Python ${{matrix.python}} on ${{ matrix.os }}  - ${{ github.event_name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        julia-version:
+          - 1.11.2
+        python: [3.11]
+        os:
+          - macOS-latest
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up Julia
-      uses: julia-actions/setup-julia@v2
-      with:
-        version: '1.11.2'
+      - name: Set up Python ${{ matrix.python }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
 
-    - name: Set up Miniconda
-      uses: conda-incubator/setup-miniconda@v2
-      with:
-        miniconda-version: "latest"
-        environment-file: environment.yml
-        activate-environment: qmat_dependency
-        use-mamba: false
+      - name: Set ENV Variables for Python
+        run: echo ENV["PYTHON"] = `which python` >> $GITHUB_ENV
 
-    - name: Create Python Environment
-      run: |
-        source "$(conda info --base)/etc/profile.d/conda.sh"
-        conda create -n qmat_dependency python=3.10 -y
-        conda activate qmat_dependency
-        conda install -c conda-forge numpy scipy -y
-        pip install qmat
+      - name: Install pip and qmat
+        run: |
+          python -m pip install --upgrade pip
+          pip install qmat
 
-    - name: Debug Python Environment
-      run: |
-        source "$(conda info --base)/etc/profile.d/conda.sh"
-        conda activate qmat_dependency
-        python --version
-        python -c "import encodings; print('Encodings module found')"
+      - name: Set up Julia
+        uses: julia-actions/setup-julia@v2
+        with:
+          version: ${{ matrix.julia-version }}
 
-    - name: Configure PyCall
-      run: |
-        source "$(conda info --base)/etc/profile.d/conda.sh"
-        conda activate qmat_dependency
-        julia --project=@. -e 'ENV["PYTHON"] = joinpath(read(`conda info --base`, String) |> chomp, "envs", "qmat_dependency", "bin", "python"); using Pkg; Pkg.build("PyCall")'
+      - uses: julia-actions/julia-buildpkg@v1
+        env:
+          PYTHON : "${{ env.pythonLocation }}/bin/python"
 
-    - name: Debug Python Path
-      run: |
-        source "$(conda info --base)/etc/profile.d/conda.sh"
-        conda activate qmat_dependency
-        echo $PATH
-        python -c "import encodings; print('Encodings module works!')"      
-
-    - name: Install Julia dependencies
-      run: julia --project=@. -e 'using Pkg; Pkg.instantiate(); Pkg.precompile()'
-
-    - name: Run tests with coverage
-      run: julia --project=@. --code-coverage test/runtests.jl
-
-    - name: Process coverage
-      uses: julia-actions/julia-processcoverage@v1
-      with:
-        input: src
-        output: lcov.info
-
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v5
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        file: ./lcov.info
-        fail_ci_if_error: true
+      - name: Run tests with coverage
+        run: julia --project=@. --code-coverage test/runtests.jl
+    
+      - name: Process coverage
+        uses: julia-actions/julia-processcoverage@v1
+        with:
+          input: src
+          output: lcov.info
+    
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./lcov.info
+          fail_ci_if_error: true
