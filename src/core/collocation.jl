@@ -70,9 +70,9 @@ function get_implicit_Qdelta(
         nodes = collocation.nodes, tLeft = collocation.t_left)
 
     if isnothing(k)
-        return gen.genCoeffs(QI)
+        return gen.genCoeffs()
     else
-        return gen.genCoeffs(QI, k = k)
+        return gen.genCoeffs(k = k)
     end
 end
 
