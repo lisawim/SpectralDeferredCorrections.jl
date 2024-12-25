@@ -19,10 +19,20 @@ end
     @test_throws ParameterError Collocation(num_nodes = 3, quad_type = "RADAU-RIGHT")
 end
 
-@testset "Check if key does exists when import qmat" begin
+@testset "Collocation - check existing key" begin
     qmat = pyimport("qmat")
 
     check_key_exists(qmat.Q_GENERATORS, "Collocation")
 
     @test_throws KeyError check_key_exists(qmat.Q_GENERATORS, "RandomKey")
+end
+
+@testset "Collocation - check return of implicit Qdelta" begin
+    coll = Collocation(num_nodes = 3, quad_type = "RADAU-RIGHT", QI = "IE")
+
+    QI = get_implicit_Qdelta(coll, "IE")
+
+    @test QI isa AbstractMatrix
+
+    @test size(QI) == (3, 3)
 end
