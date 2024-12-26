@@ -27,7 +27,7 @@ end
     @test S.problem isa AbstractProblemODE
     @test S.problem isa LinearTestSPP
 
-    @test S.t0 == t0
+    @test S.time == t0
     @test S.dt == dt
     @test S.Tend == Tend
 

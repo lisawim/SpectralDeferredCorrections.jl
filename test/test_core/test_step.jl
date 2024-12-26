@@ -17,7 +17,7 @@ using SpectralDeferredCorrections
     @test step.sweeper isa AbstractSweeper
     @test step.sweeper isa FullyImplicitSDC
 
-    @test step.t0 == 0.0
+    @test step.time == 0.0
     @test step.dt == 1e-1
     @test step.Tend == 1.0
 
