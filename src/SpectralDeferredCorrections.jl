@@ -1,8 +1,10 @@
 module SpectralDeferredCorrections
 
 using LinearAlgebra
+using SpecialMatrices
 using PyCall
 using StaticArrays
+using Polynomials
 
 # Include core modules
 include(joinpath(@__DIR__, "core/errors.jl"))

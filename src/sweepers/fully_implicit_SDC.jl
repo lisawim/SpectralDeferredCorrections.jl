@@ -22,10 +22,10 @@ struct FullyImplicitSDC <: AbstractSweeper
 
     # Outer constructor with keyword arguments
     function FullyImplicitSDC(;
-            num_nodes::Int, quad_type::String, QI::String, node_type::String = "LEGENDRE")
+            num_nodes::Int, quad_type::String, QI::String)
         # Initialize Collocation and QImat
         collocation = Collocation(
-            num_nodes = num_nodes, quad_type = quad_type, node_type = node_type, QI = QI)
+            num_nodes = num_nodes, quad_type = quad_type, QI = QI)
         QImat = get_implicit_Qdelta(collocation, QI)
 
         return FullyImplicitSDC(collocation, QImat)
