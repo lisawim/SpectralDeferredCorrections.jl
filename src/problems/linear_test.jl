@@ -36,7 +36,7 @@ u0 = [exp(2 * lamb_diff * t), lamb_diff / lamb_alg * exp(2 * lamb_diff * t)]
 problem = LinearTestSPP(eps)
 ```
 """
-struct LinearTestSPP <: ProblemODEBase.AbstractProblemODE
+struct LinearTestSPP <: AbstractProblemODE
     A::SMatrix{2, 2, Float64}
     eps::Float64
     lamb_diff::Float64
@@ -56,9 +56,7 @@ struct LinearTestSPP <: ProblemODEBase.AbstractProblemODE
     end
 end
 
-function f(problem::LinearTestSPP, t, u)
-    return problem.A * u
-end
+f(problem::LinearTestSPP, t, u) = problem.A * u
 
 function solve(problem::LinearTestSPP, rhs, t, u0, factor)
     g(u) = u - factor * problem.A * u - rhs
