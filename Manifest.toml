@@ -2,7 +2,7 @@
 
 julia_version = "1.11.2"
 manifest_format = "2.0"
-project_hash = "0144b268a193c52176de20d1f9b63ae907985392"
+project_hash = "44508fe666620dd3e8bd0b48731e9d7f48d6d7db"
 
 [[deps.ANSIColoredPrinters]]
 git-tree-sha1 = "574baf8110975760d391c710b6341da1afa48d8c"
@@ -441,6 +441,12 @@ version = "1.11.0"
 deps = ["Libdl", "LinearAlgebra", "Random", "Serialization", "SuiteSparse_jll"]
 uuid = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 version = "1.11.0"
+
+[[deps.SpecialMatrices]]
+deps = ["LinearAlgebra", "Polynomials"]
+git-tree-sha1 = "8345ce5cdbccfc12a709a055ff5cd6c7876ad22f"
+uuid = "928aab9d-ef52-54ac-8ca1-acd7ca42c160"
+version = "3.1.0"
 
 [[deps.StaticArrays]]
 deps = ["LinearAlgebra", "PrecompileTools", "Random", "StaticArraysCore"]
