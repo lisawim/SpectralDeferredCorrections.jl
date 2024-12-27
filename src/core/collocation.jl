@@ -17,6 +17,8 @@ struct Collocation
     weights::Vector{Float64}
     Q::Matrix{Float64}
     QI::String
+    right_is_node::Bool
+    left_is_node::Bool
 
     # Inner constructor
     function Collocation(
@@ -27,9 +29,11 @@ struct Collocation
             nodes::Vector{Float64},
             weights::Vector{Float64},
             Q::Matrix{Float64},
-            QI::String
+            QI::String,
+            right_is_node::Bool,
+            left_is_node::Bool
     )
-        return new(num_nodes, quad_type, t_left, t_right, nodes, weights, Q, QI)
+        return new(num_nodes, quad_type, t_left, t_right, nodes, weights, Q, QI, right_is_node, left_is_node)
     end
 
     # Outer constructor with keyword arguments
@@ -47,28 +51,16 @@ struct Collocation
 
         nodes, weights, Q = compute_Qcoefficients(num_nodes, quad_type, t_left, t_right)
 
+        left_is_node = nodes[1] == t_left
+        right_is_node = nodes[end] == t_right
+
         return Collocation(
-            num_nodes, quad_type, t_left, t_right, nodes, weights, Q, QI)
-    end
-end
-
-function get_implicit_Qdelta(
-        collocation::Collocation, QI::String, k::Union{Int, Nothing} = nothing)
-    qmat = pyimport("qmat")
-    QI_gen = qmat.QDELTA_GENERATORS[QI]
-    gen = QI_gen(Q = collocation.Q, nNodes = collocation.num_nodes,
-        nodeType = "LEGENDRE", quadType = collocation.quad_type,
-        nodes = collocation.nodes, tLeft = collocation.t_left)
-
-    if isnothing(k)
-        return gen.genCoeffs()
-    else
-        return gen.genCoeffs(k = k)
+            num_nodes, quad_type, t_left, t_right, nodes, weights, Q, QI, right_is_node, left_is_node)
     end
 end
 
 function compute_Qcoefficients(
-        num_nodes::Int, quad_type::String, t_left::Float64, t_right::Float64)
+    num_nodes::Int, quad_type::String, t_left::Float64, t_right::Float64)
     M = num_nodes
     x = Polynomial([t_left, t_right])
 
@@ -99,6 +91,27 @@ function compute_Qcoefficients(
     weights = V' \ [1 / i for i in 1:M]
 
     return nodes, weights, Q
+end
+
+function get_dTau(collocation::Collocation)
+    nodes = collocation.nodes
+
+
+end
+
+function get_implicit_Qdelta(
+        collocation::Collocation, QI::String, k::Union{Int, Nothing} = nothing)
+    qmat = pyimport("qmat")
+    QI_gen = qmat.QDELTA_GENERATORS[QI]
+    gen = QI_gen(Q = collocation.Q, nNodes = collocation.num_nodes,
+        nodeType = "LEGENDRE", quadType = collocation.quad_type,
+        nodes = collocation.nodes, tLeft = collocation.t_left)
+
+    if isnothing(k)
+        return gen.genCoeffs()
+    else
+        return gen.genCoeffs(k = k)
+    end
 end
 
 end
