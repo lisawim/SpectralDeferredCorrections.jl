@@ -33,24 +33,21 @@ function run_simulation(simulator::Simulator{T}) where {T}
     sim = simulator
     S = simulator.step
 
-    t = S.t0
     u = S.u0
     ts = Float64[]
     us = Vector{Vector{T}}()
 
     # Initialize storage
-    push!(ts, t)
+    push!(ts, S.state.time)
     push!(us, u)
 
-    while t < S.Tend
-        # Handle the final step to avoid overshooting
-        dt_actual = min(S.dt, S.Tend - t)
-
+    while !S.state.done
         iterate(sim)
-        t += dt_actual
 
         push!(us, u)
-        push!(ts, t)
+        push!(ts, compute_next_step(S))
+
+        prepare_next_step(S)
 
         #println("t=$t and u0=$(S.u0)")
     end
@@ -60,10 +57,9 @@ end
 
 function iterate(simulator::Simulator{T}) where {T}
     S = simulator.step
-    iter = 0
 
-    while iter <= S.state.maxiter
-        iter += 1
+    while S.state.iter < S.params.maxiter
+        S.state.iter += 1
     end
 end
 
