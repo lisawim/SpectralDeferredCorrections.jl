@@ -38,15 +38,11 @@ function run_simulation(simulator::Simulator{T}) where {T}
     us = Vector{Vector{T}}()
 
     # Initialize storage
-    push!(ts, S.time)
+    push!(ts, S.state.time)
     push!(us, u)
 
-    while !S.done
-        # Handle the final step to avoid overshooting
-        dt_actual = min(S.dt, S.Tend - S.time)
-
+    while !S.state.done
         iterate(sim)
-        S.time += dt_actual
 
         push!(us, u)
         push!(ts, compute_next_step(S))
@@ -62,8 +58,8 @@ end
 function iterate(simulator::Simulator{T}) where {T}
     S = simulator.step
 
-    while S.iter < S.state.maxiter
-        S.iter += 1
+    while S.state.iter < S.params.maxiter
+        S.state.iter += 1
     end
 end
 

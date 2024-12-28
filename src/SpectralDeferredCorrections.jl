@@ -51,7 +51,7 @@ export AbstractSimulator
 export run_simulation
 export Simulator
 
-export Step, ConvergenceState
+export Step, State, Parameters
 export prepare_next_step, compute_next_step
 
 end
