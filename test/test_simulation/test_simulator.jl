@@ -27,14 +27,16 @@ end
     @test S.problem isa AbstractProblemODE
     @test S.problem isa LinearTestSPP
 
-    @test S.time == t0
-    @test S.dt == dt
+    @test S.state isa State
+
+    @test S.state.time == t0
+    @test S.state.dt == dt
     @test S.Tend == Tend
 
-    @test S.state isa ConvergenceState
+    @test S.params isa Parameters
 
-    @test S.state.restol == restol
-    @test S.state.maxiter == maxiter
+    @test S.params.restol == restol
+    @test S.params.maxiter == maxiter
 end
 
 @testset "Simulator - check run_simulation" begin
