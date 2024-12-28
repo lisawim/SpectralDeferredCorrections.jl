@@ -15,6 +15,10 @@ is reached.
 
   - `restol`: Residual tolerance.
   - `maxiter`: Maximum number of iterations.
+
+### Constructors
+
+  - `Parameters(restol::Float64, maxiter::Integer)`
 """
 struct Parameters
     restol::Float64
@@ -37,6 +41,10 @@ the current number of iteration, the current residual and a flag whether the sol
   - `iter`: Current number of iteration(s already done).
   - `residual`: Residual of the problem.
   - `done`: `false`, if simulation is not yet done.
+
+### Constructors
+
+  - `State(t0::Float64, dt::Float64, Tend::Float64)`
 """
 mutable struct State
     time::Float64
@@ -66,6 +74,14 @@ Represents a time step where every quantity is stored for.
     and maximum number of iterations.
   - `Tend`: End time of simulation.
   - `u0`: Initial condition (problem-specific).
+
+### Constructors
+
+The `Step` type can be initialized by passing a problem and a sweeper with time step and the
+time domain the constructor. Residual tolerance and maximum number of iterations needs to be
+set as well:
+
+  - `Step(problem::AbstractProblemODE, sweeper::AbstractSweeper, t0::Float64, dt::Float64, Tend::Float64, restol::Float64, maxiter::Integer, u0::Vector{T}) where {T}`
 """
 mutable struct Step{T}
     problem::AbstractProblemODE
